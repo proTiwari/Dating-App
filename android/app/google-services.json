@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "153947068736",
+    "project_id": "dating-3af3b",
+    "storage_bucket": "dating-3af3b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153947068736:android:8ad342e0c59b5939ca02a5",
+        "android_client_info": {
+          "package_name": "com.datenerd.datenerds"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6LThKsO9L9pTiduUR4b4A1sb-bpiizMU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
