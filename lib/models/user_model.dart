@@ -160,6 +160,8 @@ class UserModel extends Model {
     // Optional functions called on app start
     VoidCallback? signInScreen,
     VoidCallback? blockedScreen,
+    required VoidCallback quizScreen,
+    required VoidCallback quizFailedScreen,
   }) async {
     /// Check user auth
     if (getFirebaseUser != null) {
@@ -193,6 +195,24 @@ class UserModel extends Model {
               return;
             }
 
+            if(userDoc['quiz'] == null) {
+              // Go to Quiz Screen
+              quizScreen();
+              return;
+            }
+
+            if(userDoc['quiz']['passed'] != true) {
+              // Go to Quiz Screen
+              quizFailedScreen();
+              return;
+            }
+
+            if(userDoc['profileComplete'] != true) {
+              // Go to Quiz Screen
+              signUpScreen();
+              return;
+            }
+
             // Go to home screen
             homeScreen();
           }
@@ -202,7 +222,8 @@ class UserModel extends Model {
           // Debug
           debugPrint("firebaseUser does not exists");
           // Go to Sign Up Screen
-          signUpScreen();
+          //signUpScreen();
+          quizScreen();
         }
       });
     } else {
@@ -383,6 +404,28 @@ class UserModel extends Model {
       isLoading = false;
       notifyListeners();
       debugPrint('signUp() -> error');
+      // Callback function
+      onError(onError);
+    });
+  }
+
+  /// Update quiz answers
+  Future<void> updateQuizAnswers({
+    required Map<String, dynamic> quizData,
+    // Callback functions
+    required VoidCallback onSuccess,
+    required Function(String) onFail,
+  }) async {
+    /// Update user quiz answers
+    updateUserData(userId: user.userId, data: {"quiz": quizData})
+        .then((_) {
+      notifyListeners();
+      debugPrint('updateQuizAnswers() -> success');
+      // Callback function
+      onSuccess();
+    }).catchError((onError) {
+      notifyListeners();
+      debugPrint('updateQuizAnswers() -> error');
       // Callback function
       onError(onError);
     });

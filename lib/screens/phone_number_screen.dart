@@ -4,6 +4,8 @@ import 'package:dating_app/helpers/app_localizations.dart';
 import 'package:dating_app/models/user_model.dart';
 import 'package:dating_app/screens/blocked_account_screen.dart';
 import 'package:dating_app/screens/home_screen.dart';
+import 'package:dating_app/screens/quiz/quiz_failed_screen.dart';
+import 'package:dating_app/screens/quiz/quiz_screen.dart';
 import 'package:dating_app/screens/sign_up_screen.dart';
 import 'package:dating_app/screens/update_location_sceen.dart';
 import 'package:dating_app/screens/verification_code_screen.dart';
@@ -147,7 +149,10 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
             updateLocationScreen: () => _nextScreen(const UpdateLocationScreen()),
             signUpScreen: () => _nextScreen(const SignUpScreen()),
             homeScreen: () => _nextScreen(const HomeScreen()),
-            blockedScreen: () => _nextScreen(const BlockedAccountScreen()));
+            blockedScreen: () => _nextScreen(const BlockedAccountScreen()),
+            quizScreen: () => _nextScreen(const QuizScreen()),
+            quizFailedScreen: () => _nextScreen(const QuizFailedScreen()),
+          );
           // END   
         },
         codeSent: (code) async {

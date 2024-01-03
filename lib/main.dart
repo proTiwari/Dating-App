@@ -4,6 +4,7 @@ import 'package:country_code_picker/country_localizations.dart';
 import 'package:dating_app/helpers/app_localizations.dart';
 import 'package:dating_app/models/user_model.dart';
 import 'package:dating_app/models/app_model.dart';
+import 'package:dating_app/screens/quiz/quiz_screen.dart';
 import 'package:dating_app/screens/splash_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';

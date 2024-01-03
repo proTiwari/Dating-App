@@ -3,6 +3,8 @@ import 'package:dating_app/dialogs/progress_dialog.dart';
 import 'package:dating_app/models/user_model.dart';
 import 'package:dating_app/plugins/otp_screen/otp_screen.dart';
 import 'package:dating_app/screens/home_screen.dart';
+import 'package:dating_app/screens/quiz/quiz_failed_screen.dart';
+import 'package:dating_app/screens/quiz/quiz_screen.dart';
 import 'package:dating_app/screens/sign_up_screen.dart';
 import 'package:dating_app/screens/update_location_sceen.dart';
 import 'package:dating_app/widgets/svg_icon.dart';
@@ -51,7 +53,11 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
           UserModel().authUserAccount(
             updateLocationScreen: () => _nextScreen(const UpdateLocationScreen()),
             homeScreen: () => _nextScreen(const HomeScreen()), 
-            signUpScreen: () => _nextScreen(const SignUpScreen()));
+            signUpScreen: () => _nextScreen(const SignUpScreen()),
+            quizScreen: () => _nextScreen(const QuizScreen()),
+            quizFailedScreen: () => _nextScreen(const QuizFailedScreen()),
+          );
+
         },
         onError: () async {
           // Hide dialog

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dating_app/screens/blocked_account_screen.dart';
+import 'package:dating_app/screens/quiz/quiz_failed_screen.dart';
+import 'package:dating_app/screens/quiz/quiz_screen.dart';
 import 'package:dating_app/screens/update_location_sceen.dart';
 import 'package:flutter/material.dart';
 import 'package:dating_app/constants/constants.dart';
@@ -64,7 +66,10 @@ class _SplashScreenState extends State<SplashScreen> {
             signInScreen: () => _nextScreen(const SignInScreen()),
             signUpScreen: () => _nextScreen(const SignUpScreen()),
             homeScreen: () => _nextScreen(const HomeScreen()),
-            blockedScreen: () => _nextScreen(const BlockedAccountScreen()));
+            blockedScreen: () => _nextScreen(const BlockedAccountScreen()),
+            quizScreen: () => _nextScreen(const QuizScreen()),
+            quizFailedScreen: () => _nextScreen(const QuizFailedScreen()),
+        );
       }
     });
   }
