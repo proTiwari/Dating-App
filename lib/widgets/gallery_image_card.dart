@@ -76,13 +76,15 @@ class GalleryImageCard extends StatelessWidget {
     final i18n = AppLocalizations.of(context);
     final pr = ProgressDialog(context, isDismissible: false);
 
-    /// Check user vip account
+    /// Premium code start
+    /*/// Check user vip account
     if (!UserModel().userIsVip && index > 3) {
       /// Show VIP dialog
       showDialog(context: context, builder: (context) => const VipDialog());
       debugPrint('You need to activate vip account');
       return;
-    }
+    }*/
+    /// Premium code end
 
     await showModalBottomSheet(
         context: context,
@@ -114,13 +116,15 @@ class GalleryImageCard extends StatelessWidget {
     final i18n = AppLocalizations.of(context);
     final pr = ProgressDialog(context, isDismissible: false);
 
-    /// Check user vip account
+    /// Premium code start
+    /*/// Check user vip account
     if (!UserModel().userIsVip && index > 3) {
       /// Show VIP dialog
       showDialog(context: context, builder: (context) => const VipDialog());
       debugPrint('You need to activate vip account');
       return;
-    }
+    }*/
+    /// Premium code end
 
     /// Confirm before
     confirmDialog(context,

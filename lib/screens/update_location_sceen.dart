@@ -134,9 +134,11 @@ class _UpdateLocationScreenState extends State<UpdateLocationScreen> {
           }
         });
       }, onTimeoutException: (exception) async {
+        debugPrint("User Position error: $exception");
         // Show timeout error message
         _showTimeoutErrorMessage(context);
       }, onFail: (error) {
+            debugPrint("User Position error: $error");
         // Show fail error message
         _showFailErrorMessage(context);
       });

@@ -160,7 +160,7 @@ class UserModel extends Model {
     // Optional functions called on app start
     VoidCallback? signInScreen,
     VoidCallback? blockedScreen,
-    required VoidCallback quizScreen,
+    required VoidCallback quizHomeScreen,
     required VoidCallback quizFailedScreen,
   }) async {
     /// Check user auth
@@ -170,6 +170,29 @@ class UserModel extends Model {
         /// Check user account in database
         /// if exists check status and take action
         if (userDoc.exists) {
+
+          if(userDoc.data()!.containsKey('quiz')) {
+
+            if (userDoc.get('quiz')['passed'] != true) {
+              quizFailedScreen();
+              return;
+            }
+          } else {
+            quizHomeScreen();
+            return;
+          }
+
+          if(userDoc.data()!.containsKey('profileComplete')) {
+            if(userDoc.get('profileComplete') != true) {
+              signUpScreen();
+              return;
+            }
+          }
+          else {
+            signUpScreen();
+            return;
+          }
+
           // Check location data:
           // Get User's latitude & longitude
           final GeoPoint userGeoPoint = userDoc[USER_GEO_POINT]['geopoint'];
@@ -195,24 +218,6 @@ class UserModel extends Model {
               return;
             }
 
-            if(userDoc['quiz'] == null) {
-              // Go to Quiz Screen
-              quizScreen();
-              return;
-            }
-
-            if(userDoc['quiz']['passed'] != true) {
-              // Go to Quiz Screen
-              quizFailedScreen();
-              return;
-            }
-
-            if(userDoc['profileComplete'] != true) {
-              // Go to Quiz Screen
-              signUpScreen();
-              return;
-            }
-
             // Go to home screen
             homeScreen();
           }
@@ -223,7 +228,7 @@ class UserModel extends Model {
           debugPrint("firebaseUser does not exists");
           // Go to Sign Up Screen
           //signUpScreen();
-          quizScreen();
+          quizHomeScreen();
         }
       });
     } else {
@@ -385,7 +390,8 @@ class UserModel extends Model {
         //USER_SHOW_ME: 'everyone',
         USER_MAX_DISTANCE: AppModel().appInfo.freeAccountMaxDistance, // double
       },
-    }).then((_) async {
+      "profileComplete": true,
+    }, SetOptions(merge: true)).then((_) async {
       /// Get current user in database
       final DocumentSnapshot<Map<String, dynamic>> userDoc =
           await getUser(getFirebaseUser!.uid);
@@ -417,7 +423,7 @@ class UserModel extends Model {
     required Function(String) onFail,
   }) async {
     /// Update user quiz answers
-    updateUserData(userId: user.userId, data: {"quiz": quizData})
+    _firestore.collection(C_USERS).doc(getFirebaseUser!.uid).set({"quiz": quizData}, SetOptions(merge: true))
         .then((_) {
       notifyListeners();
       debugPrint('updateQuizAnswers() -> success');
@@ -427,7 +433,7 @@ class UserModel extends Model {
       notifyListeners();
       debugPrint('updateQuizAnswers() -> error');
       // Callback function
-      onError(onError);
+      onFail(onError.toString());
     });
   }
 

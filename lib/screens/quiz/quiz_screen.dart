@@ -1,7 +1,13 @@
 import 'package:dating_app/models/user_model.dart';
+import 'package:dating_app/screens/quiz/quiz_failed_screen.dart';
+import 'package:dating_app/screens/quiz/quiz_home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
+import '../blocked_account_screen.dart';
 import '../home_screen.dart';
+import '../sign_up_screen.dart';
+import '../update_location_sceen.dart';
 
 enum AttractivePersonalityType {
   dressingSense,
@@ -9,6 +15,13 @@ enum AttractivePersonalityType {
   intellect,
   empathy,
   humour,
+}
+
+enum EntertainmentType {
+  anime,
+  movies,
+  webSeries,
+  documentaries,
 }
 
 extension AttractivePersonalityTypeExtension on AttractivePersonalityType {
@@ -30,6 +43,23 @@ extension AttractivePersonalityTypeExtension on AttractivePersonalityType {
   }
 }
 
+extension EntertainmentTypeExtension on EntertainmentType {
+  String get name {
+    switch (this) {
+      case EntertainmentType.anime:
+        return "Anime";
+      case EntertainmentType.movies:
+        return "Movies";
+      case EntertainmentType.webSeries:
+        return "Web Series";
+      case EntertainmentType.documentaries:
+        return "Documentaries";
+      default:
+        return "";
+    }
+  }
+}
+
 class QuizScreen extends StatefulWidget {
   const QuizScreen({Key? key}) : super(key: key);
 
@@ -42,7 +72,7 @@ class _QuizScreenState extends State<QuizScreen> {
   PageController pageController = PageController();
 
   bool? _ans1;
-  bool? _ans2;
+  EntertainmentType? _ans2;
   AttractivePersonalityType? _ans3;
   int? _ans4;
   int? _ans5;
@@ -58,6 +88,13 @@ class _QuizScreenState extends State<QuizScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            IconButton(
+              iconSize: 20,
+              icon: Icon(Icons.arrow_back_ios_outlined),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -68,6 +105,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 ],
               ),
             ),
+            SizedBox(height: 20,),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -88,16 +126,20 @@ class _QuizScreenState extends State<QuizScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if(index == 0) ...[
-                              const Text("Do you like to read?", style: TextStyle(fontSize: 20)),
+                              const Text("Are you a reader?", style: TextStyle(fontSize: 20)),
                               SizedBox(height: 16,),
                               RadioListTile<bool>(
                                 title: const Text('Yes'),
                                 value: true,
                                 groupValue: _ans1,
                                 onChanged: (bool? value) {
-                                  setState(() {
-                                    _ans1 = value;
-                                  });
+                                  if(value != null) {
+                                    setState(() {
+                                      _ans1 = value;
+                                      currentPage++;
+                                    });
+                                    pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+                                  }
                                 },
                               ),
                               RadioListTile<bool>(
@@ -105,35 +147,33 @@ class _QuizScreenState extends State<QuizScreen> {
                                 value: false,
                                 groupValue: _ans1,
                                 onChanged: (bool? value) {
-                                  setState(() {
-                                    _ans1 = value;
-                                  });
+                                  if(value != null) {
+                                    setState(() {
+                                      _ans1 = value;
+                                      currentPage++;
+                                    });
+                                    pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+                                  }
                                 },
                               ),
                             ]
                             else if(index == 1) ...[
-                              const Text("Do you like anime?", style: TextStyle(fontSize: 20)),
+                              const Text("What is your favorite type of entertainment to watch?", style: TextStyle(fontSize: 20)),
                               SizedBox(height: 16,),
-                              RadioListTile<bool>(
-                                title: const Text('Yes'),
-                                value: true,
+                              ...EntertainmentType.values.map((e) => RadioListTile<EntertainmentType>(
+                                title: Text(e.name),
+                                value: e,
                                 groupValue: _ans2,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    _ans2 = value;
-                                  });
+                                onChanged: (EntertainmentType? value) {
+                                  if(value != null) {
+                                    setState(() {
+                                      _ans2 = value;
+                                      currentPage++;
+                                    });
+                                    pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+                                  }
                                 },
-                              ),
-                              RadioListTile<bool>(
-                                title: const Text('No'),
-                                value: false,
-                                groupValue: _ans2,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    _ans2 = value;
-                                  });
-                                },
-                              ),
+                              )).toList(),
                             ]
                             else if(index == 2) ...[
                                 const Text("What in a person attracts you the most?", style: TextStyle(fontSize: 20)),
@@ -143,9 +183,13 @@ class _QuizScreenState extends State<QuizScreen> {
                                   value: e,
                                   groupValue: _ans3,
                                   onChanged: (AttractivePersonalityType? value) {
-                                    setState(() {
-                                      _ans3 = value;
-                                    });
+                                    if(value != null) {
+                                      setState(() {
+                                        _ans3 = value;
+                                        currentPage++;
+                                      });
+                                      pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+                                    }
                                   },
                                 )).toList(),
                             ]
@@ -190,23 +234,27 @@ class _QuizScreenState extends State<QuizScreen> {
         ),
       ),
       floatingActionButton: showNext() ? FloatingActionButton(
-        onPressed: () {
+        onPressed: isLoading ? null : () {
           if(currentPage == 4) {
             setState(() {
               isLoading = true;
             });
-            UserModel().updateQuizAnswers(quizData: {
+            ScopedModel.of<UserModel>(context, rebuildOnChange: true).updateQuizAnswers(quizData: {
               "ans1": _ans1,
-              "ans2": _ans2,
+              "ans2": _ans2?.name,
               "ans3": _ans3?.name,
               "ans4": _ans4,
               "ans5": _ans5,
               "passed": true,
             }, onSuccess: () {
-              _nextScreen(const HomeScreen());
-              setState(() {
-                isLoading = false;
-              });
+              UserModel().authUserAccount(
+                updateLocationScreen: () => _nextScreen(const UpdateLocationScreen()),
+                signUpScreen: () => _nextScreen(const SignUpScreen()),
+                homeScreen: () => _nextScreen(const HomeScreen()),
+                blockedScreen: () => _nextScreen(const BlockedAccountScreen()),
+                quizHomeScreen: () => _nextScreen(const QuizHomeScreen()),
+                quizFailedScreen: () => _nextScreen(const QuizFailedScreen()),
+              );
             }, onFail: (error) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
               setState(() {
@@ -221,7 +269,7 @@ class _QuizScreenState extends State<QuizScreen> {
             });
           }
         },
-        child: const Icon(Icons.arrow_forward, color: Colors.white,),
+        child: isLoading ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white,),) : const Icon(Icons.arrow_forward, color: Colors.white,),
       ) : null,
     );
   }
@@ -237,21 +285,6 @@ class _QuizScreenState extends State<QuizScreen> {
   bool showNext() {
     bool flag = false;
     switch(currentPage) {
-      case 0:
-        if(_ans1 != null) {
-          flag = true;
-        }
-        break;
-      case 1:
-        if(_ans2 != null) {
-          flag = true;
-        }
-        break;
-      case 2:
-        if(_ans3 != null) {
-          flag = true;
-        }
-        break;
       case 3:
         if(_ans4 != null) {
           flag = true;

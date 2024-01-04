@@ -25,9 +25,11 @@ class UserGallery extends StatelessWidget {
               dynamic imageProvider =
                   const AssetImage("assets/images/camera.png");
 
-              if (!userModel.userIsVip && index > 3) {
+              /// Premium code start
+              /*if (!userModel.userIsVip && index > 3) {
                 imageProvider = const AssetImage("assets/images/crow_badge_small.png");
-              }
+              }*/
+              /// Premium code end
 
               /// Check gallery
               if (userModel.user.userGallery != null) {

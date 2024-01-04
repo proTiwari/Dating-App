@@ -32,10 +32,12 @@ class ProfileTab extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            /// Show VIP dialog
+            /// Premium code start
+            /*/// Show VIP dialog
             const VipAccountCard(),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 10),*/
+            /// Premium code end
 
             /// App Section Card
             AppSectionCard(),

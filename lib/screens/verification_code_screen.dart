@@ -4,6 +4,7 @@ import 'package:dating_app/models/user_model.dart';
 import 'package:dating_app/plugins/otp_screen/otp_screen.dart';
 import 'package:dating_app/screens/home_screen.dart';
 import 'package:dating_app/screens/quiz/quiz_failed_screen.dart';
+import 'package:dating_app/screens/quiz/quiz_home_screen.dart';
 import 'package:dating_app/screens/quiz/quiz_screen.dart';
 import 'package:dating_app/screens/sign_up_screen.dart';
 import 'package:dating_app/screens/update_location_sceen.dart';
@@ -54,7 +55,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
             updateLocationScreen: () => _nextScreen(const UpdateLocationScreen()),
             homeScreen: () => _nextScreen(const HomeScreen()), 
             signUpScreen: () => _nextScreen(const SignUpScreen()),
-            quizScreen: () => _nextScreen(const QuizScreen()),
+            quizHomeScreen: () => _nextScreen(const QuizHomeScreen()),
             quizFailedScreen: () => _nextScreen(const QuizFailedScreen()),
           );
 

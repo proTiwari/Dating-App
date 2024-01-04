@@ -5,6 +5,7 @@ import 'package:dating_app/models/user_model.dart';
 import 'package:dating_app/screens/blocked_account_screen.dart';
 import 'package:dating_app/screens/home_screen.dart';
 import 'package:dating_app/screens/quiz/quiz_failed_screen.dart';
+import 'package:dating_app/screens/quiz/quiz_home_screen.dart';
 import 'package:dating_app/screens/quiz/quiz_screen.dart';
 import 'package:dating_app/screens/sign_up_screen.dart';
 import 'package:dating_app/screens/update_location_sceen.dart';
@@ -27,8 +28,8 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldkey = GlobalKey<ScaffoldState>();
   final _numberController = TextEditingController();
-  String? _phoneCode = '+1'; // Define yor default phone code
-  final String _initialSelection = 'US'; // Define yor default country code
+  String? _phoneCode = '+91'; // Define yor default phone code
+  final String _initialSelection = 'IN'; // Define yor default country code
   late AppLocalizations _i18n;
   late ProgressDialog _pr;
 
@@ -150,7 +151,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
             signUpScreen: () => _nextScreen(const SignUpScreen()),
             homeScreen: () => _nextScreen(const HomeScreen()),
             blockedScreen: () => _nextScreen(const BlockedAccountScreen()),
-            quizScreen: () => _nextScreen(const QuizScreen()),
+            quizHomeScreen: () => _nextScreen(const QuizHomeScreen()),
             quizFailedScreen: () => _nextScreen(const QuizFailedScreen()),
           );
           // END   

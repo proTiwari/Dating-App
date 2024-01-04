@@ -85,7 +85,7 @@ class AppHelper {
   }) async {
     try {
       final Position position = await Geolocator.getCurrentPosition(
-          timeLimit: const Duration(seconds: 10));
+          timeLimit: const Duration(seconds: 20));
       // Call success function
       onSuccess(position);
     } on TimeoutException catch (e) {
