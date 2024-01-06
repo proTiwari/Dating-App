@@ -1,6 +1,7 @@
 import 'package:dating_app/models/user_model.dart';
 import 'package:dating_app/screens/quiz/quiz_failed_screen.dart';
 import 'package:dating_app/screens/quiz/quiz_home_screen.dart';
+import 'package:dating_app/screens/quiz/quiz_passed_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -239,22 +240,11 @@ class _QuizScreenState extends State<QuizScreen> {
             setState(() {
               isLoading = true;
             });
-            ScopedModel.of<UserModel>(context, rebuildOnChange: true).updateQuizAnswers(quizData: {
-              "ans1": _ans1,
-              "ans2": _ans2?.name,
-              "ans3": _ans3?.name,
-              "ans4": _ans4,
-              "ans5": _ans5,
-              "passed": true,
-            }, onSuccess: () {
-              UserModel().authUserAccount(
-                updateLocationScreen: () => _nextScreen(const UpdateLocationScreen()),
-                signUpScreen: () => _nextScreen(const SignUpScreen()),
-                homeScreen: () => _nextScreen(const HomeScreen()),
-                blockedScreen: () => _nextScreen(const BlockedAccountScreen()),
-                quizHomeScreen: () => _nextScreen(const QuizHomeScreen()),
-                quizFailedScreen: () => _nextScreen(const QuizFailedScreen()),
-              );
+
+            Map<String, dynamic> quizData = _getQuizData(_ans1!, _ans2!, _ans3!, _ans4!, _ans5!);
+
+            ScopedModel.of<UserModel>(context, rebuildOnChange: true).updateQuizAnswers(quizData: quizData, onSuccess: () {
+              _nextScreen(quizData["passed"] ? QuizPassedScreen() : QuizFailedScreen());
             }, onFail: (error) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
               setState(() {
@@ -272,6 +262,39 @@ class _QuizScreenState extends State<QuizScreen> {
         child: isLoading ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white,),) : const Icon(Icons.arrow_forward, color: Colors.white,),
       ) : null,
     );
+  }
+
+  Map<String, dynamic> _getQuizData(bool ans1, EntertainmentType ans2, AttractivePersonalityType ans3, int ans4, int ans5) {
+    int score = 0;
+    if(ans1) {
+      score += 1;
+    }
+
+    if(ans2 == EntertainmentType.anime || ans2 == EntertainmentType.webSeries || ans2 == EntertainmentType.documentaries) {
+      score += 1;
+    }
+
+    if(ans3 == AttractivePersonalityType.empathy || ans3 == AttractivePersonalityType.intellect || ans3 == AttractivePersonalityType.humour) {
+      score += 1;
+    }
+
+    if(ans4 <= 7) {
+      score += 1;
+    }
+
+    if(ans5 < 2) {
+      score += 1;
+    }
+
+    return {
+      "ans1": ans1,
+      "ans2": ans2.name,
+      "ans3": ans3.name,
+      "ans4": ans4,
+      "ans5": ans5,
+      "score": score,
+      "passed": score >= 2,
+    };
   }
 
   void _nextScreen(screen) {

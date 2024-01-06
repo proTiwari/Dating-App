@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:dating_app/constants/constants.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -65,6 +66,7 @@ class MyApp extends StatelessWidget {
           scaffoldMessengerKey: scaffoldMessengerKey,
           title: APP_NAME,
           debugShowCheckedModeBanner: false,
+          themeMode: ThemeMode.light,
 
           /// Setup translations
           localizationsDelegates: const [
@@ -99,11 +101,14 @@ class MyApp extends StatelessWidget {
   // App theme
   ThemeData _appTheme() {
     return ThemeData(
+      fontFamily: GoogleFonts.beVietnamPro().fontFamily,
+      useMaterial3: true,
       primaryColor: APP_PRIMARY_COLOR,
       colorScheme: const ColorScheme.light().copyWith(
           primary: APP_PRIMARY_COLOR,
           secondary: APP_ACCENT_COLOR,
           background: APP_PRIMARY_COLOR),
+      textTheme: GoogleFonts.beVietnamProTextTheme(),
       scaffoldBackgroundColor: Colors.white,
       inputDecorationTheme: InputDecorationTheme(
           errorStyle: const TextStyle(fontSize: 16),
