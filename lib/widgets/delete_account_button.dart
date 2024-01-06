@@ -11,7 +11,7 @@ class DeleteAccountButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final i18n = AppLocalizations.of(context);
     return Center(
-      child: DefaultButton(
+      child: FilledButton(
         child: Text(i18n.translate("delete_account"),
             style: const TextStyle(fontSize: 18)),
         onPressed: () {

@@ -295,6 +295,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     _selectedIndex == 3
                         ? "assets/icons/user_2_icon.svg"
                         : "assets/icons/user_icon.svg",
+                    width: 27,
+                    height: 27,
                     color: _selectedIndex == 3
                         ? Theme.of(context).primaryColor
                         : null),
@@ -335,8 +337,8 @@ class _HomeScreenState extends State<HomeScreen> {
         _selectedIndex == 2
             ? "assets/icons/message_2_icon.svg"
             : "assets/icons/message_icon.svg",
-        width: 30,
-        height: 30,
+        width: 27,
+        height: 27,
         color: _selectedIndex == 2 ? Theme.of(context).primaryColor : null);
 
     /// Handle stream

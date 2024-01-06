@@ -104,11 +104,13 @@ class MyApp extends StatelessWidget {
       fontFamily: GoogleFonts.beVietnamPro().fontFamily,
       useMaterial3: true,
       primaryColor: APP_PRIMARY_COLOR,
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Colors.white),
       colorScheme: const ColorScheme.light().copyWith(
           primary: APP_PRIMARY_COLOR,
           secondary: APP_ACCENT_COLOR,
           background: APP_PRIMARY_COLOR),
       textTheme: GoogleFonts.beVietnamProTextTheme(),
+      cardColor: Colors.white,
       scaffoldBackgroundColor: Colors.white,
       inputDecorationTheme: InputDecorationTheme(
           errorStyle: const TextStyle(fontSize: 16),
@@ -121,6 +123,7 @@ class MyApp extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.black),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         titleTextStyle: const TextStyle(color: Colors.grey, fontSize: 18),
+        surfaceTintColor: Colors.transparent,
       ),
     );
   }
