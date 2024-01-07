@@ -105,18 +105,23 @@ class MyApp extends StatelessWidget {
       useMaterial3: true,
       primaryColor: APP_PRIMARY_COLOR,
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Colors.white),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: APP_PRIMARY_COLOR,
+      ),
       colorScheme: const ColorScheme.light().copyWith(
           primary: APP_PRIMARY_COLOR,
           secondary: APP_ACCENT_COLOR,
-          background: APP_PRIMARY_COLOR),
+          background: Colors.white,),
       textTheme: GoogleFonts.beVietnamProTextTheme(),
       cardColor: Colors.white,
       scaffoldBackgroundColor: Colors.white,
       inputDecorationTheme: InputDecorationTheme(
           errorStyle: const TextStyle(fontSize: 16),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(28),
-          )),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        iconColor: Colors.grey,
+      ),
       appBarTheme: AppBarTheme(
         color: Colors.white,
         elevation: Platform.isIOS ? 0 : 4.0,

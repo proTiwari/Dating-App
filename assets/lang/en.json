@@ -12,6 +12,19 @@
   "contact_us": "Contact us",
   "send_your_message_to_our_email_address": "Send your message to our e-mail address:",
 
+  "email": "Email",
+  "please_enter_your_email": "Please enter your email",
+  "please_enter_a_valid_email": "Please enter a valid email",
+  "enter_your_email": "Enter your email",
+
+  "height": "Height",
+  "height_optional": "Height (optional)",
+  "please_enter_your_height": "Please enter your height",
+  "please_enter_a_valid_height": "Please enter a valid height",
+  "enter_your_height": "Enter your height",
+  "enter_your_height_in_cm": "Enter your height in cm",
+  "cm": "cm",
+
   "_HomeScreen": "*** Home Screen Translations ***",
   "discover": "Discover",
   "matches": "Matches",

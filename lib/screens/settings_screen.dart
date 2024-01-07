@@ -56,10 +56,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final Map<String, dynamic> settings = UserModel().user.userSettings!;
     final String? showMe = settings[USER_SHOW_ME];
     // Check option
-    if (showMe != null) {
-      return i18n.translate(showMe);
-    }
-    return i18n.translate('opposite_gender');
+
+    return showMe ?? i18n.translate("everyone");
   }
 
   @override

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// APP SETINGS INFO CONSTANTS - SECTION ///
 ///
 const String APP_NAME = "DateNerds";
-const Color APP_PRIMARY_COLOR = Colors.pink; 
+const Color APP_PRIMARY_COLOR = Color(0xFFFF2400);
 const Color APP_ACCENT_COLOR = Colors.pinkAccent;
 const String APP_VERSION_NAME = "Android v1.0.0 & iOS v1.0.0";
 const int ANDROID_APP_VERSION_NUMBER = 1; // Google Play Version Number
@@ -76,6 +76,8 @@ const String ADMOB_INTERSTITIAL_AD_ID = "admob_interstitial_ad_id";
 /// DATABASE FIELDS FOR USER COLLECTION  ///
 ///
 const String USER_ID = "user_id";
+const String USER_EMAIL = "user_email";
+const String USER_HEIGHT = "user_height";
 const String USER_PROFILE_PHOTO = "user_photo_link";
 const String USER_FULLNAME = "user_fullname";
 const String USER_GENDER = "user_gender";
@@ -86,7 +88,6 @@ const String USER_SCHOOL = "user_school";
 const String USER_JOB_TITLE = "user_job_title";
 const String USER_BIO = "user_bio";
 const String USER_PHONE_NUMBER = "user_phone_number";
-const String USER_EMAIL = "user_email";
 const String USER_GALLERY = "user_gallery";
 const String USER_COUNTRY = "user_country";
 const String USER_LOCALITY = "user_locality";
@@ -155,3 +156,39 @@ const String BLOCKED_BY_USER_ID = 'blocked_by_user_id';
 /// DATABASE SHARED FIELDS FOR COLLECTION
 ///
 const String TIMESTAMP = "timestamp";
+
+const genders = [
+  'Male',
+  'Female',
+  'Lesbian',
+  'Gay / Homosexual',
+  'Bisexual',
+  'Transgender',
+  'Queer',
+  'Abrosexual',
+  'Aroace',
+  'Aroflux',
+  'Androphilic / Androsexual',
+  'Aromantic',
+  'Asexual',
+  'Demisexual',
+  'Demiromantic',
+  'Finsexual',
+  'Gay Male / Vincian',
+  'Greysexual',
+  'Gynephilic / Gynesexual',
+  'Lithosexual',
+  'Lithromantic',
+  'Minisexual',
+  'Multisexual',
+  'Neptunic',
+  'Omnisexual',
+  'Ninsexual',
+  'Pansexual',
+  'Polysexual',
+  'Polyamorous',
+  'Sapphic',
+  'Saturnic',
+  'Uranic',
+  'Other',
+];

@@ -81,17 +81,17 @@ class _ShowMeDialogState extends State<ShowMeDialog> {
           child: SingleChildScrollView(
             child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: mapOptions.entries.map((option) {
+                children: [...genders, 'Everyone'].map((option) {
                   return RadioListTile<String>(
-                      selected: _selectedOption == option.value ? true : false,
-                      title: Text(option.value),
+                      selected: _selectedOption == option ? true : false,
+                      title: Text(option),
                       activeColor: Theme.of(context).primaryColor,
-                      value: option.value,
+                      value: option,
                       groupValue: _selectedOption,
                       onChanged: (value) {
                         setState(() {
                           _selectedOption = value.toString();
-                          _selectedOptionKey = option.key;
+                          _selectedOptionKey = option;
                         });
                         debugPrint('Selected option: $value');
                       });

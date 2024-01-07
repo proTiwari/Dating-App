@@ -197,7 +197,7 @@ class _UpdateLocationScreenState extends State<UpdateLocationScreen> {
               ),
               const SizedBox(height: 20),
               // Get current location button
-              DefaultButton(
+              FilledButton(
                   child: Text(_i18n.translate('GET_LOCATION'),
                       style:
                           const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),

@@ -333,8 +333,8 @@ class UserModel extends Model {
     required int userBirthDay,
     required int userBirthMonth,
     required int userBirthYear,
-    required String userSchool,
-    required String userJobTitle,
+    required String userEmail,
+    required double? userHeight,
     required String userBio,
     // Callback functions
     required VoidCallback onSuccess,
@@ -368,11 +368,10 @@ class UserModel extends Model {
       USER_BIRTH_DAY: userBirthDay,
       USER_BIRTH_MONTH: userBirthMonth,
       USER_BIRTH_YEAR: userBirthYear,
-      USER_SCHOOL: userSchool,
-      USER_JOB_TITLE: userJobTitle,
+      USER_EMAIL: userEmail,
+      USER_HEIGHT: userHeight,
       USER_BIO: userBio,
       USER_PHONE_NUMBER: getFirebaseUser!.phoneNumber ?? '',
-      USER_EMAIL: getFirebaseUser!.email ?? '',
       USER_STATUS: 'active',
       USER_LEVEL: 'user',
       // User location info
@@ -442,6 +441,13 @@ class UserModel extends Model {
     required String userSchool,
     required String userJobTitle,
     required String userBio,
+    required String userGender,
+    required int userBirthDay,
+    required int userBirthMonth,
+    required int userBirthYear,
+    required double? userHeight,
+    required String userFullName,
+    required String userEmail,
     // Callback functions
     required VoidCallback onSuccess,
     required Function(String) onFail,
@@ -451,6 +457,13 @@ class UserModel extends Model {
       USER_SCHOOL: userSchool,
       USER_JOB_TITLE: userJobTitle,
       USER_BIO: userBio,
+      USER_FULLNAME: userFullName,
+      USER_HEIGHT: userHeight,
+      USER_BIRTH_DAY: userBirthDay,
+      USER_BIRTH_MONTH: userBirthMonth,
+      USER_BIRTH_YEAR: userBirthYear,
+      USER_GENDER: userGender,
+      USER_EMAIL: userEmail,
     }).then((_) {
       isLoading = false;
       notifyListeners();

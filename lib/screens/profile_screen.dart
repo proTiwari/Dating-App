@@ -164,23 +164,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                           const SizedBox(height: 5),
 
-                          /// Job title
-                          _rowProfileInfo(context,
+                          /// Height title
+                          widget.user.userHeight != null ? _rowProfileInfo(context,
                               icon: SvgIcon("assets/icons/job_bag_icon.svg",
                                   color: Theme.of(context).primaryColor,
                                   width: 27,
                                   height: 27),
-                              title: widget.user.userJobTitle),
+                              title: widget.user.userJobTitle) : Container(),
 
-                          const SizedBox(height: 5),
-
-                          /// Education
-                          _rowProfileInfo(context,
-                              icon: SvgIcon("assets/icons/university_icon.svg",
-                                  color: Theme.of(context).primaryColor,
-                                  width: 34,
-                                  height: 34),
-                              title: widget.user.userSchool),
+                          SizedBox(height: widget.user.userHeight != null ? 5 : 0),
 
                           /// Birthday
                           _rowProfileInfo(context,

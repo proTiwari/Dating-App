@@ -12,8 +12,12 @@ import 'package:dating_app/widgets/svg_icon.dart';
 import 'package:dating_app/widgets/terms_of_service_row.dart';
 import 'package:flutter/material.dart';
 import 'package:dating_app/widgets/default_button.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
+
+import '../components/decimal_input_formater.dart';
+import '../constants/constants.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -30,6 +34,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _schoolController = TextEditingController();
   final _jobController = TextEditingController();
   final _bioController = TextEditingController();
+  final _birthdayController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _heightController = TextEditingController();
 
   /// User Birthday info
   int _userBirthDay = 0;
@@ -41,7 +48,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   File? _imageFile;
   bool _agreeTerms = false;
   String? _selectedGender;
-  final List<String> _genders = ['Male', 'Female'];
+
   late AppLocalizations _i18n;
 
   /// Set terms
@@ -75,9 +82,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _initialDateTime = date;
       // Set for label
       _birthday = date.toString().split(' ')[0];
+      _birthdayController.text = _birthday!;
       // User birthday info
       _userBirthDay = date.day;
       _userBirthMonth = date.month;
+
       _userBirthYear = date.year;
     });
   }
@@ -213,7 +222,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           prefixIcon: const Padding(
                             padding: EdgeInsets.all(12.0),
-                            child: SvgIcon("assets/icons/user_icon.svg"),
+                            child: Icon(Icons.person_outline),
                           )),
                       validator: (name) {
                         // Basic validation
@@ -225,9 +234,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     const SizedBox(height: 20),
 
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                          labelText: _i18n.translate("email"),
+                          hintText: _i18n.translate("enter_your_email"),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          prefixIcon: const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Icon(Icons.email_outlined),
+                          )),
+                      validator: (email) {
+                        // Basic validation
+                        if (email?.isEmpty ?? false) {
+                          return _i18n.translate("please_enter_your_email");
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
                     /// User gender
                     DropdownButtonFormField<String>(
-                      items: _genders.map((gender) {
+                      items: genders.map((gender) {
                         return DropdownMenuItem(
                           value: gender,
                           child: _i18n.translate("lang") != 'en'
@@ -252,7 +281,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const SizedBox(height: 20),
 
                     /// Birthday card
-                    Card(
+                    /*Card(
                         clipBehavior: Clip.antiAlias,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(28),
@@ -268,23 +297,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             _showDatePicker();
                           },
                         )),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 20),*/
 
-                    /// School field
                     TextFormField(
-                      controller: _schoolController,
+                      controller: _birthdayController,
+                      readOnly: true,
                       decoration: InputDecoration(
-                          labelText: _i18n.translate("school"),
-                          hintText: _i18n.translate("enter_your_school_name"),
+                          labelText: _i18n.translate("birthday"),
+                          hintText: _i18n.translate("select_your_birthday"),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           prefixIcon: const Padding(
-                            padding: EdgeInsets.all(9.0),
-                            child: SvgIcon("assets/icons/university_icon.svg"),
-                          )),
+                            padding: EdgeInsets.all(12.0),
+                            child: Icon(Icons.calendar_month_outlined),
+                          ),
+                        suffixIcon: const Icon(Icons.arrow_drop_down),
+                      ),
+
+                      onTap: () {
+                        /// Select birthday
+                        _showDatePicker();
+                      },
                     ),
                     const SizedBox(height: 20),
 
-                    /// Job title field
+                    /// Height field
+                    TextFormField(
+                      controller: _heightController,
+                      keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true, signed: false),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+                        DecimalTextInputFormatter(decimalRange: 2),
+                      ],
+                      decoration: InputDecoration(
+                          labelText: _i18n.translate("height_optional"),
+                          hintText: _i18n.translate("enter_your_height_in_cm"),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          prefixIcon: const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Icon(Icons.height_outlined),
+                          ),
+                        suffix: Text(_i18n.translate("cm")),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    /*/// Job title field
                     TextFormField(
                       controller: _jobController,
                       decoration: InputDecoration(
@@ -296,7 +354,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             child: SvgIcon("assets/icons/job_bag_icon.svg"),
                           )),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 20),*/
 
                     /// Bio field
                     TextFormField(
@@ -308,7 +366,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         prefixIcon: const Padding(
                           padding: EdgeInsets.all(12.0),
-                          child: SvgIcon("assets/icons/info_icon.svg"),
+                          child: Icon(Icons.info_outline),
                         ),
                       ),
                       validator: (bio) {
@@ -327,7 +385,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     /// Sign Up button
                     SizedBox(
                       width: double.maxFinite,
-                      child: DefaultButton(
+                      child: FilledButton(
                         child: Text(_i18n.translate("CREATE_ACCOUNT"),
                             style: const TextStyle(fontSize: 18)),
                         onPressed: () {
@@ -385,8 +443,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         userBirthDay: _userBirthDay,
         userBirthMonth: _userBirthMonth,
         userBirthYear: _userBirthYear,
-        userSchool: _schoolController.text.trim(),
-        userJobTitle: _jobController.text.trim(),
+        //userSchool: _schoolController.text.trim(),
+        //userJobTitle: _jobController.text.trim(),
+        userEmail: _emailController.text.trim(),
+        userHeight: double.tryParse(_heightController.text.trim()),
         userBio: _bioController.text.trim(),
         onSuccess: () async {
           // Show success message

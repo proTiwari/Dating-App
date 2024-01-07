@@ -7,7 +7,12 @@ import 'package:dating_app/widgets/image_source_sheet.dart';
 import 'package:dating_app/widgets/svg_icon.dart';
 import 'package:dating_app/widgets/user_gallery.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
+
+import '../components/decimal_input_formater.dart';
+import '../constants/constants.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -27,6 +32,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _bioController = TextEditingController(text: UserModel().user.userBio);
   late AppLocalizations _i18n;
   late ProgressDialog _pr;
+
+  final _nameController = TextEditingController(text: UserModel().user.userFullname);
+  final _birthdayController = TextEditingController(text: DateTime(UserModel().user.userBirthYear, UserModel().user.userBirthMonth, UserModel().user.userBirthDay).toString().split(' ')[0]);
+  final _emailController = TextEditingController(text: UserModel().user.userEmail);
+  final _heightController = TextEditingController(text: UserModel().user.userHeight?.toStringAsFixed(2));
+
+  /// User Birthday info
+  int _userBirthDay = UserModel().user.userBirthDay;
+  int _userBirthMonth = UserModel().user.userBirthMonth;
+  int _userBirthYear = UserModel().user.userBirthYear;
+  // End
+  DateTime _initialDateTime = DateTime.now();
+  String? _birthday = DateTime(UserModel().user.userBirthYear, UserModel().user.userBirthMonth, UserModel().user.userBirthDay).toString().split(' ')[0];
+  String _selectedGender = UserModel().user.userGender;
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +130,75 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                 const SizedBox(height: 20),
 
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                      labelText: _i18n.translate("fullname"),
+                      hintText: _i18n.translate("enter_your_fullname"),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      prefixIcon: const Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Icon(Icons.person_outline),
+                      )),
+                  validator: (name) {
+                    // Basic validation
+                    if (name?.isEmpty ?? false) {
+                      return _i18n.translate("please_enter_your_fullname");
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                      labelText: _i18n.translate("email"),
+                      hintText: _i18n.translate("enter_your_email"),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      prefixIcon: const Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Icon(Icons.email_outlined),
+                      )),
+                  validator: (email) {
+                    // Basic validation
+                    if (email?.isEmpty ?? false) {
+                      return _i18n.translate("please_enter_your_email");
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+
+                /// User gender
+                DropdownButtonFormField<String>(
+                  value: _selectedGender,
+                  items: genders.map((gender) {
+                    return DropdownMenuItem(
+                      value: gender,
+                      child: _i18n.translate("lang") != 'en'
+                          ? Text(
+                          '${gender.toString()} - ${_i18n.translate(gender.toString().toLowerCase())}')
+                          : Text(gender.toString()),
+                    );
+                  }).toList(),
+                  hint: Text(_i18n.translate("select_gender")),
+                  onChanged: (gender) {
+                    if(gender != null) {
+                      setState(() {
+                        _selectedGender = gender;
+                      });
+                    }
+                  },
+                  validator: (String? value) {
+                    if (value == null) {
+                      return _i18n.translate("please_select_your_gender");
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+
                 /// Bio field
                 TextFormField(
                   controller: _bioController,
@@ -133,7 +221,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                /// School field
+                /*/// School field
                 TextFormField(
                   controller: _schoolController,
                   decoration: InputDecoration(
@@ -170,6 +258,48 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     }
                     return null;
                   },
+                ),
+                const SizedBox(height: 20),*/
+                TextFormField(
+                  controller: _birthdayController,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    labelText: _i18n.translate("birthday"),
+                    hintText: _i18n.translate("select_your_birthday"),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    prefixIcon: const Padding(
+                      padding: EdgeInsets.all(12.0),
+                      child: Icon(Icons.calendar_month_outlined),
+                    ),
+                    suffixIcon: const Icon(Icons.arrow_drop_down),
+                  ),
+
+                  onTap: () {
+                    /// Select birthday
+                    _showDatePicker();
+                  },
+                ),
+                const SizedBox(height: 20),
+
+                /// Height field
+                TextFormField(
+                  controller: _heightController,
+                  keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true, signed: false),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+                    DecimalTextInputFormatter(decimalRange: 2),
+                  ],
+                  decoration: InputDecoration(
+                    labelText: _i18n.translate("height_optional"),
+                    hintText: _i18n.translate("enter_your_height_in_cm"),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    prefixIcon: const Padding(
+                      padding: EdgeInsets.all(12.0),
+                      child: Icon(Icons.height_outlined),
+                    ),
+                    suffix: Text(_i18n.translate("cm")),
+                  ),
                 ),
                 const SizedBox(height: 20),
               ],
@@ -210,6 +340,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         userSchool: _schoolController.text.trim(),
         userJobTitle: _jobController.text.trim(),
         userBio: _bioController.text.trim(),
+        userFullName: _nameController.text.trim(),
+        userGender: _selectedGender,
+        userBirthDay: _userBirthDay,
+        userBirthMonth: _userBirthMonth,
+        userBirthYear: _userBirthYear,
+        userHeight: double.tryParse(_heightController.text.trim()),
+        userEmail: _emailController.text.trim(),
         onSuccess: () {
           /// Show success message
           successDialog(context,
@@ -233,4 +370,66 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   .translate("an_error_occurred_while_updating_your_profile"));
         });
   }
+
+  void _updateUserBithdayInfo(DateTime date) {
+    setState(() {
+      // Update the inicial date
+      _initialDateTime = date;
+      // Set for label
+      _birthday = date.toString().split(' ')[0];
+      _birthdayController.text = _birthday!;
+      // User birthday info
+      _userBirthDay = date.day;
+      _userBirthMonth = date.month;
+
+      _userBirthYear = date.year;
+    });
+  }
+
+  // Get Date time picker app locale
+  DateTimePickerLocale _getDatePickerLocale() {
+    // Inicial value
+    DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
+    // Get the name of the current locale.
+    switch (_i18n.translate('lang')) {
+    // Handle your Supported Languages below:
+      case 'en': // English
+        _locale = DateTimePickerLocale.en_us;
+        break;
+    }
+    return _locale;
+  }
+
+  /// Display date picker.
+  void _showDatePicker() {
+    DatePicker.showDatePicker(
+      context,
+      onMonthChangeStartWithFirstDate: true,
+      pickerTheme: DateTimePickerTheme(
+        showTitle: true,
+        confirm: Text(_i18n.translate('DONE'),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0,
+                color: Theme.of(context).primaryColor)),
+      ),
+      minDateTime: DateTime(1920, 1, 1),
+      maxDateTime: DateTime.now(),
+      initialDateTime: _initialDateTime,
+      dateFormat: 'yyyy-MMMM-dd', // Date format
+      locale: _getDatePickerLocale(), // Set your App Locale here
+      onClose: () => debugPrint("----- onClose -----"),
+      onCancel: () => debugPrint('onCancel'),
+      onChange: (dateTime, List<int> index) {
+        // Get birthday info
+        _updateUserBithdayInfo(dateTime);
+      },
+      onConfirm: (dateTime, List<int> index) {
+        // Get birthday info
+        _updateUserBithdayInfo(dateTime);
+      },
+    );
+  }
 }
+
+

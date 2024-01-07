@@ -15,6 +15,7 @@ class User {
   final String userBio;
   final String userPhoneNumber;
   final String userEmail;
+  final double? userHeight;
   final String userCountry;
   final String userLocality;
   final GeoPoint userGeoPoint;
@@ -58,6 +59,7 @@ class User {
     required this.userTotalLikes,
     required this.userTotalVisits,
     required this.userTotalDisliked,
+    required this.userHeight,
   });
 
   /// factory user object
@@ -89,6 +91,7 @@ class User {
       userTotalLikes: doc[USER_TOTAL_LIKES] ?? 0,
       userTotalVisits: doc[USER_TOTAL_VISITS] ?? 0,
       userTotalDisliked: doc[USER_TOTAL_DISLIKED] ?? 0,
+      userHeight: doc[USER_HEIGHT],
     );
   }
 }
