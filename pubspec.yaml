@@ -65,6 +65,7 @@ dependencies:
   fluttertoast: 8.2.2 # For toast messages
   change_app_package_name: ^1.1.0
   google_fonts: ^4.0.4
+  font_awesome_flutter: ^10.6.0
 
 dependency_overrides:
   modal_bottom_sheet: ^3.0.0-pre

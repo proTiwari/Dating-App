@@ -235,9 +235,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           min: 0,
 
                           /// Check User VIP Account to set max distance available
-                          max: UserModel().userIsVip
+                          /*max: UserModel().userIsVip
                               ? AppModel().appInfo.vipAccountMaxDistance
-                              : AppModel().appInfo.freeAccountMaxDistance,
+                              : AppModel().appInfo.freeAccountMaxDistance,*/
+                          max: AppModel().appInfo.vipAccountMaxDistance,
                           onChanged: (radius) {
                             setState(() {
                               _selectedMaxDistance = radius;
@@ -260,7 +261,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           },
                         ),
                         // Show message for non VIP user
-                        UserModel().userIsVip
+                        /*UserModel().userIsVip
                             ? const SizedBox(width: 0, height: 0)
                             : Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -270,7 +271,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     "${_i18n.translate('radius_away')}",
                                     style: TextStyle(
                                         color: Theme.of(context).primaryColor)),
-                              ),
+                              ),*/
                       ],
                     )),
                 const SizedBox(height: 15),

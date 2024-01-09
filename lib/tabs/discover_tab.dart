@@ -3,6 +3,7 @@ import 'package:dating_app/api/dislikes_api.dart';
 import 'package:dating_app/api/likes_api.dart';
 import 'package:dating_app/api/matches_api.dart';
 import 'package:dating_app/api/visits_api.dart';
+import 'package:dating_app/components/BottomSheetFilterDiscover.dart';
 import 'package:dating_app/constants/constants.dart';
 import 'package:dating_app/datas/user.dart';
 import 'package:dating_app/dialogs/its_match_dialog.dart';
@@ -17,6 +18,8 @@ import 'package:dating_app/widgets/processing.dart';
 import 'package:dating_app/widgets/profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:dating_app/api/users_api.dart';
+
+import '../utils/colors.dart';
 
 class DiscoverTab extends StatefulWidget {
   const DiscoverTab({Key? key}) : super(key: key);
@@ -71,11 +74,61 @@ class _DiscoverTabState extends State<DiscoverTab> {
     });
   }
 
+  void showFilterBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+      ),
+      builder: (context) => BottomSheetFilterDiscoverWidget(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     /// Initialization
     _i18n = AppLocalizations.of(context);
-    return _showUsers();
+    return Column(children: [
+      Padding(
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+        child: Divider(
+          indent: 3,
+          height: 1,
+          color: borderColor.withOpacity(0.5),
+        ),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(width: 16),
+          Spacer(),
+        InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () {
+            showFilterBottomSheet();
+          },
+
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: EdgeInsets.all(8),
+            child: Icon(Icons.sort, color: APP_PRIMARY_COLOR, size: 30),
+          ),
+        ),
+
+          SizedBox(width: 16),
+        ],
+      ),
+      SizedBox(height: 16,),
+      _showUsers(),
+
+    ],);
   }
 
   Widget _showUsers() {

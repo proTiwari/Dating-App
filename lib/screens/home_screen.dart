@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/api/conversations_api.dart';
 import 'package:dating_app/api/notifications_api.dart';
@@ -13,6 +14,7 @@ import 'package:dating_app/tabs/conversations_tab.dart';
 import 'package:dating_app/tabs/discover_tab.dart';
 import 'package:dating_app/tabs/matches_tab.dart';
 import 'package:dating_app/tabs/profile_tab.dart';
+import 'package:dating_app/utils/colors.dart';
 import 'package:dating_app/widgets/notification_counter.dart';
 import 'package:dating_app/widgets/svg_icon.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -20,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:dating_app/constants/constants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -240,11 +243,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset("assets/images/app_logo.png", width: 40, height: 40),
-            const SizedBox(width: 5),
-            const Text(APP_NAME),
+            ScopedModelDescendant<UserModel>(
+              builder: (context, child, model) => Text('Hello, ' + model.user.userFullname + ' 👋',
+                  style: const TextStyle(fontSize: 20, color: textPrimaryColor, fontWeight: FontWeight.w600)),
+            ),
+            SizedBox(height: 2),
+            Text('Find your match now...', style: TextStyle(fontSize: 14, color: textSecondaryColor)),
           ],
         ),
         actions: [
@@ -265,9 +272,8 @@ class _HomeScreenState extends State<HomeScreen> {
           items: [
             /// Discover Tab
             BottomNavigationBarItem(
-                icon: SvgIcon("assets/icons/search_icon.svg",
-                    width: 27,
-                    height: 27,
+                icon: Icon(Icons.search,
+                    size: 27,
                     color: _selectedIndex == 0
                         ? Theme.of(context).primaryColor
                         : null),
@@ -275,10 +281,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
             /// Matches Tab
             BottomNavigationBarItem(
-                icon: SvgIcon(
+                icon: Icon(
                     _selectedIndex == 1
-                        ? "assets/icons/heart_2_icon.svg"
-                        : "assets/icons/heart_icon.svg",
+                        ? FontAwesomeIcons.solidHeart
+                        : FontAwesomeIcons.heart,
                     color: _selectedIndex == 1
                         ? Theme.of(context).primaryColor
                         : null),
@@ -291,12 +297,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
             /// Profile Tab
             BottomNavigationBarItem(
-                icon: SvgIcon(
+                icon: Icon(
                     _selectedIndex == 3
-                        ? "assets/icons/user_2_icon.svg"
-                        : "assets/icons/user_icon.svg",
-                    width: 27,
-                    height: 27,
+                        ? FontAwesomeIcons.solidUser
+                        : FontAwesomeIcons.user,
                     color: _selectedIndex == 3
                         ? Theme.of(context).primaryColor
                         : null),
@@ -309,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Count unread notifications
   Widget _getNotificationCounter() {
     // Set icon
-    const icon = SvgIcon("assets/icons/bell_icon.svg", width: 33, height: 33);
+    const icon = Icon(Icons.notifications, size: 30,);
 
     /// Handle stream
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -333,12 +337,11 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Count unread conversations
   Widget _getConversationCounter() {
     // Set icon
-    final icon = SvgIcon(
+    final icon = Icon(
         _selectedIndex == 2
-            ? "assets/icons/message_2_icon.svg"
-            : "assets/icons/message_icon.svg",
-        width: 27,
-        height: 27,
+            ? FontAwesomeIcons.solidCommentDots
+            : FontAwesomeIcons.commentDots,
+        size: 27,
         color: _selectedIndex == 2 ? Theme.of(context).primaryColor : null);
 
     /// Handle stream
