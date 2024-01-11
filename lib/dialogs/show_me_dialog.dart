@@ -4,7 +4,8 @@ import 'package:dating_app/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class ShowMeDialog extends StatefulWidget {
-  const ShowMeDialog({Key? key}) : super(key: key);
+  Function(String)? onSavePressManual;
+  ShowMeDialog({super.key, this.onSavePressManual});
 
   @override
   _ShowMeDialogState createState() => _ShowMeDialogState();
@@ -122,6 +123,11 @@ class _ShowMeDialogState extends State<ShowMeDialog> {
                     onPressed: _selectedOption == ''
                         ? null
                         : () async {
+                              if(widget.onSavePressManual != null) {
+                                widget.onSavePressManual!(_selectedOptionKey);
+                                Navigator.of(context).pop();
+                                return;
+                              }
                             /// Save option
                             await UserModel().updateUserData(
                                 userId: UserModel().user.userId,

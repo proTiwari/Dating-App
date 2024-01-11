@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/datas/user.dart';
 import 'package:dating_app/models/app_model.dart';
+import 'package:dating_app/screens/personal_interest_profile/personal_interest_profile_form_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:dating_app/helpers/app_helper.dart';
@@ -15,6 +16,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:dating_app/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
+
+import '../datas/filter_data.dart';
 
 class UserModel extends Model {
   /// Final Variables
@@ -162,6 +165,7 @@ class UserModel extends Model {
     VoidCallback? blockedScreen,
     required VoidCallback quizHomeScreen,
     required VoidCallback quizFailedScreen,
+    required VoidCallback personalInterestProfileFormScreen,
   }) async {
     /// Check user auth
     if (getFirebaseUser != null) {
@@ -190,6 +194,11 @@ class UserModel extends Model {
           }
           else {
             signUpScreen();
+            return;
+          }
+
+          if(!userDoc.data()!.containsKey('personalInterests')) {
+            personalInterestProfileFormScreen();
             return;
           }
 
@@ -431,6 +440,26 @@ class UserModel extends Model {
     }).catchError((onError) {
       notifyListeners();
       debugPrint('updateQuizAnswers() -> error');
+      // Callback function
+      onFail(onError.toString());
+    });
+  }
+
+  /// Update personal Interests
+  Future<void> updatePersonalInterests({
+    required Map<String, dynamic> data,
+    // Callback functions
+    required VoidCallback onSuccess,
+    required Function(String) onFail,
+  }) async {
+    /// Update user quiz answers
+    _firestore.collection(C_USERS).doc(getFirebaseUser!.uid).set({"personalInterests": data}, SetOptions(merge: true))
+        .then((_) {
+      notifyListeners();
+      // Callback function
+      onSuccess();
+    }).catchError((onError) {
+      notifyListeners();
       // Callback function
       onFail(onError.toString());
     });
@@ -704,31 +733,24 @@ class UserModel extends Model {
 
   // Filter the User Gender
   Query<Map<String, dynamic>> filterUserGender(
+      FilterData? filters,
       Query<Map<String, dynamic>> query) {
     // Get the opposite gender
-    final String oppositeGender = user.userGender == "Male" ? "Female" : "Male";
+    final String oppositeGender = user.userGender == "Male" ? "Female" : (user.userGender == "Female" ? "Male" : "Everyone");
 
     /// Get user settings
     final Map<String, dynamic>? settings = user.userSettings;
     // Debug
     // debugPrint('userSettings: $settings');
 
-    // Handle Show Me option
-    if (settings != null) {
+    if(filters?.gender != null) {
+      query = query.where(USER_GENDER, isEqualTo: filters!.gender);
+    }
+    else if (settings != null) {
       // Check show me option
       if (settings[USER_SHOW_ME] != null) {
         // Control show me option
-        switch (settings[USER_SHOW_ME]) {
-          case 'men':
-            query = query.where(USER_GENDER, isEqualTo: 'Male');
-            break;
-          case 'women':
-            query = query.where(USER_GENDER, isEqualTo: 'Female');
-            break;
-          case 'everyone':
-            // Do nothing - app will get everyone
-            break;
-        }
+        query = query.where(USER_GENDER, isEqualTo: settings[USER_SHOW_ME]);
       } else {
         query = query.where(USER_GENDER, isEqualTo: oppositeGender);
       }

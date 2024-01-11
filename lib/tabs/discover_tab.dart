@@ -3,11 +3,12 @@ import 'package:dating_app/api/dislikes_api.dart';
 import 'package:dating_app/api/likes_api.dart';
 import 'package:dating_app/api/matches_api.dart';
 import 'package:dating_app/api/visits_api.dart';
-import 'package:dating_app/components/BottomSheetFilterDiscover.dart';
+import 'package:dating_app/components/bottom_sheet_filter_discover.dart';
 import 'package:dating_app/constants/constants.dart';
 import 'package:dating_app/datas/user.dart';
 import 'package:dating_app/dialogs/its_match_dialog.dart';
 import 'package:dating_app/helpers/app_localizations.dart';
+import 'package:dating_app/models/app_model.dart';
 import 'package:dating_app/models/user_model.dart';
 import 'package:dating_app/plugins/swipe_stack/swipe_stack.dart';
 import 'package:dating_app/screens/disliked_profile_screen.dart';
@@ -18,7 +19,9 @@ import 'package:dating_app/widgets/processing.dart';
 import 'package:dating_app/widgets/profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:dating_app/api/users_api.dart';
+import 'package:scoped_model/scoped_model.dart';
 
+import '../datas/filter_data.dart';
 import '../utils/colors.dart';
 
 class DiscoverTab extends StatefulWidget {
@@ -41,8 +44,9 @@ class _DiscoverTabState extends State<DiscoverTab> {
 
   /// Get all Users
   Future<void> _loadUsers(
+      FilterData? filterData,
       List<DocumentSnapshot<Map<String, dynamic>>> dislikedUsers) async {
-    _usersApi.getUsers(dislikedUsers: dislikedUsers).then((users) {
+    _usersApi.getUsers(filterData: filterData, dislikedUsers: dislikedUsers).then((users) {
       // Check result
       if (users.isNotEmpty) {
         if (mounted) {
@@ -70,7 +74,7 @@ class _DiscoverTabState extends State<DiscoverTab> {
       await UserModel().checkUserMaxDistance();
 
       /// Load all users
-      await _loadUsers(dislikedUsers);
+      await _loadUsers(AppModel().discoverFilterData, dislikedUsers);
     });
   }
 
@@ -84,7 +88,16 @@ class _DiscoverTabState extends State<DiscoverTab> {
           topRight: Radius.circular(30),
         ),
       ),
-      builder: (context) => BottomSheetFilterDiscoverWidget(),
+      builder: (context) => BottomSheetFilterDiscoverWidget(onFilterDataChanged: (filters) {
+        _dislikesApi.getDislikedUsers(withLimit: false).then(
+                (List<DocumentSnapshot<Map<String, dynamic>>> dislikedUsers) async {
+              /// Validate user max distance
+              await UserModel().checkUserMaxDistance();
+
+              /// Load all users
+              await _loadUsers(filters, dislikedUsers);
+            });
+      },),
     );
   }
 
@@ -106,21 +119,35 @@ class _DiscoverTabState extends State<DiscoverTab> {
         children: [
           SizedBox(width: 16),
           Spacer(),
-        InkWell(
-          borderRadius: BorderRadius.circular(10),
-          onTap: () {
-            showFilterBottomSheet();
-          },
+        ScopedModelDescendant<AppModel>(builder: (context, child, model) {
+          return InkWell(
+            borderRadius: BorderRadius.circular(10),
+            onTap: () {
+              showFilterBottomSheet();
+            },
 
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(10),
+            child: Badge(
+              largeSize: 20,
+              backgroundColor: APP_PRIMARY_COLOR,
+              isLabelVisible: model.discoverFilterData!.getAppliedFilterCount() > 0,
+              label: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Text(
+                  AppModel().discoverFilterData!.getAppliedFilterCount().toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                ),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(8),
+                child: Icon(Icons.sort, color: APP_PRIMARY_COLOR, size: 30),
+              ),
             ),
-            padding: EdgeInsets.all(8),
-            child: Icon(Icons.sort, color: APP_PRIMARY_COLOR, size: 30),
-          ),
-        ),
+          );
+        }),
 
           SizedBox(width: 16),
         ],

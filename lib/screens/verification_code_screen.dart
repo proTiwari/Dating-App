@@ -3,6 +3,7 @@ import 'package:dating_app/dialogs/progress_dialog.dart';
 import 'package:dating_app/models/user_model.dart';
 import 'package:dating_app/plugins/otp_screen/otp_screen.dart';
 import 'package:dating_app/screens/home_screen.dart';
+import 'package:dating_app/screens/personal_interest_profile/personal_interest_profile_form_screen.dart';
 import 'package:dating_app/screens/quiz/quiz_failed_screen.dart';
 import 'package:dating_app/screens/quiz/quiz_home_screen.dart';
 import 'package:dating_app/screens/quiz/quiz_screen.dart';
@@ -57,6 +58,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
             signUpScreen: () => _nextScreen(const SignUpScreen()),
             quizHomeScreen: () => _nextScreen(const QuizHomeScreen()),
             quizFailedScreen: () => _nextScreen(const QuizFailedScreen()),
+            personalInterestProfileFormScreen: () => _nextScreen(const PersonalInterestProfileFormScreen()),
           );
 
         },

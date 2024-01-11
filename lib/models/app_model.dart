@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:dating_app/datas/app_info.dart';
 
+import '../datas/filter_data.dart';
+
 class AppModel extends Model {
   // Variables
   late AppInfo appInfo;
+  FilterData? discoverFilterData;
 
   /// Create Singleton factory for [AppModel]
   ///
@@ -20,5 +23,14 @@ class AppModel extends Model {
     appInfo = AppInfo.fromDocument(appDoc);
     notifyListeners();
     debugPrint('AppInfo object -> updated!');
+  }
+
+  /// Set data to FilterData object
+  FilterData setFilterData(double? maxDistance, RangeValues? ageRange, String? gender) {
+    FilterData mFilter = FilterData(maxDistance: maxDistance, ageRange: ageRange, gender: gender);
+    discoverFilterData = mFilter;
+    notifyListeners();
+    debugPrint('FilterData object -> updated!');
+    return mFilter;
   }
 }

@@ -352,7 +352,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           context: context,
                           barrierDismissible: false,
                           builder: (context) {
-                            return const ShowMeDialog();
+                            return ShowMeDialog();
                           });
                     },
                   ),

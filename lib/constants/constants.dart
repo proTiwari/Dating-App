@@ -192,3 +192,19 @@ const genders = [
   'Uranic',
   'Other',
 ];
+
+const interestCategories = [
+  'Art',
+  'Books',
+  'Music',
+  'Technology',
+  'Movies',
+  'Sports',
+  'Travel',
+  'Politics',
+  'Food',
+  'Fashion',
+  'Fitness',
+  'Animals',
+  'Nature',
+];

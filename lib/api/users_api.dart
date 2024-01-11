@@ -5,6 +5,8 @@ import 'package:dating_app/models/user_model.dart';
 import 'package:dating_app/plugins/geoflutterfire/geoflutterfire.dart';
 import 'package:flutter/material.dart';
 
+import '../datas/filter_data.dart';
+
 class UsersApi {
   /// Get firestore instance
   ///
@@ -13,6 +15,7 @@ class UsersApi {
   /// Get all users
   Future<List<DocumentSnapshot<Map<String, dynamic>>>> getUsers({
     required List<DocumentSnapshot<Map<String, dynamic>>> dislikedUsers,
+    required FilterData? filterData,
   }) async {
     /// Build Users query
     Query<Map<String, dynamic>> usersQuery = _firestore
@@ -21,7 +24,7 @@ class UsersApi {
         .where(USER_LEVEL, isEqualTo: 'user');
 
     // Filter the User Gender
-    usersQuery = UserModel().filterUserGender(usersQuery);
+    usersQuery = UserModel().filterUserGender(filterData, usersQuery);
 
     // Instance of Geoflutterfire
     final Geoflutterfire geo = Geoflutterfire();
@@ -38,7 +41,7 @@ class UsersApi {
         .collection(collectionRef: usersQuery)
         .within(
             center: center,
-            radius: settings![USER_MAX_DISTANCE].toDouble(),
+            radius: filterData?.maxDistance ?? settings![USER_MAX_DISTANCE].toDouble(),
             field: USER_GEO_POINT,
             strictMode: true)
         .first;
@@ -87,8 +90,8 @@ class UsersApi {
       return userRegDateA.compareTo(userRegDateB);
     });
 
-    final int minAge = settings[USER_MIN_AGE];
-    final int maxAge = settings[USER_MAX_AGE];
+    final int minAge = filterData?.ageRange?.start.toInt() ?? settings![USER_MIN_AGE];
+    final int maxAge = filterData?.ageRange?.end.toInt() ?? settings![USER_MAX_AGE];
 
     // Filter Profile Ages
     return allUsers.where((DocumentSnapshot<Map<String, dynamic>> user) {
