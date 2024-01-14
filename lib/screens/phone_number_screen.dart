@@ -108,7 +108,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                     const SizedBox(height: 20),
                     SizedBox(
                       width: double.maxFinite,
-                      child: DefaultButton(
+                      child: FilledButton(
                         child: Text(_i18n.translate("CONTINUE"),
                             style: const TextStyle(fontSize: 18)),
                         onPressed: () async {

@@ -72,7 +72,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: SizedBox(
                   width: double.maxFinite,
-                  child: DefaultButton(
+                  child: FilledButton(
                     child: Text(_i18n.translate("sign_in_with_phone_number"),
                         style: const TextStyle(fontSize: 18)),
                     onPressed: () {
