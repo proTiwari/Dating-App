@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:dating_app/dialogs/common_dialogs.dart';
 import 'package:dating_app/helpers/app_localizations.dart';
 import 'package:dating_app/models/user_model.dart';
+import 'package:dating_app/screens/personal_interest_profile/personal_interest_profile_form_screen.dart';
+import 'package:dating_app/screens/quiz/quiz_failed_screen.dart';
+import 'package:dating_app/screens/quiz/quiz_home_screen.dart';
 import 'package:dating_app/screens/sign_in_screen.dart';
 import 'package:dating_app/screens/update_location_sceen.dart';
 import 'package:dating_app/widgets/image_source_sheet.dart';
@@ -18,6 +21,8 @@ import 'package:scoped_model/scoped_model.dart';
 
 import '../components/decimal_input_formater.dart';
 import '../constants/constants.dart';
+import 'blocked_account_screen.dart';
+import 'home_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -143,6 +148,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     /// Initialization
     _i18n = AppLocalizations.of(context);
     _birthday = _i18n.translate("select_your_birthday");
+  }
+
+  void _nextScreen(screen) {
+    // Go to next page route
+    Future(() {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => screen), (route) => false);
+    });
   }
 
   @override
@@ -456,12 +469,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
               positiveAction: () {
             // Execute action
             // Go to get the user device's current location
-            Future(() {
+            /*Future(() {
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
                       builder: (context) => const UpdateLocationScreen()),
                   (route) => false);
-            });
+            });*/
+                UserModel().authUserAccount(
+                  updateLocationScreen: () => _nextScreen(const UpdateLocationScreen()),
+                  signInScreen: () => _nextScreen(const SignInScreen()),
+                  signUpScreen: () => _nextScreen(const SignUpScreen()),
+                  homeScreen: () => _nextScreen(const HomeScreen()),
+                  blockedScreen: () => _nextScreen(const BlockedAccountScreen()),
+                  quizHomeScreen: () => _nextScreen(const QuizHomeScreen()),
+                  quizFailedScreen: () => _nextScreen(const QuizFailedScreen()),
+                  personalInterestProfileFormScreen: () => _nextScreen(const PersonalInterestProfileFormScreen()),
+                );
             // End
           });
         },
