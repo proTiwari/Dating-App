@@ -114,43 +114,46 @@ class _DiscoverTabState extends State<DiscoverTab> {
           color: borderColor.withOpacity(0.5),
         ),
       ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(width: 16),
-          Spacer(),
-        ScopedModelDescendant<AppModel>(builder: (context, child, model) {
-          return InkWell(
-            borderRadius: BorderRadius.circular(10),
-            onTap: () {
-              showFilterBottomSheet();
-            },
+      SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(width: 16),
+            Spacer(),
+          ScopedModelDescendant<AppModel>(rebuildOnChange: true, builder: (context, child, model) {
+            return InkWell(
+              borderRadius: BorderRadius.circular(10),
+              onTap: () {
+                showFilterBottomSheet();
+              },
 
-            child: Badge(
-              largeSize: 20,
-              backgroundColor: APP_PRIMARY_COLOR,
-              isLabelVisible: model.discoverFilterData!.getAppliedFilterCount() > 0,
-              label: Padding(
-                padding: const EdgeInsets.all(3.0),
-                child: Text(
-                  AppModel().discoverFilterData!.getAppliedFilterCount().toString(),
-                  style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+              child: Badge(
+                largeSize: 20,
+                backgroundColor: APP_PRIMARY_COLOR,
+                isLabelVisible: (model.discoverFilterData?.getAppliedFilterCount() ?? 0) > 0,
+                label: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text(
+                    AppModel().discoverFilterData?.getAppliedFilterCount().toString() ?? '',
+                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Icon(Icons.sort, color: APP_PRIMARY_COLOR, size: 30),
                 ),
               ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: EdgeInsets.all(8),
-                child: Icon(Icons.sort, color: APP_PRIMARY_COLOR, size: 30),
-              ),
-            ),
-          );
-        }),
+            );
+          }),
 
-          SizedBox(width: 16),
-        ],
+            SizedBox(width: 16),
+          ],
+        ),
       ),
       SizedBox(height: 16,),
       _showUsers(),
