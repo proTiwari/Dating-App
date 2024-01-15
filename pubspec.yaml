@@ -129,11 +129,11 @@ flutter_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/images/app_logo.png"
+  image_path: "assets/images/neonerds-logos.jpeg"
 
 # Generate app logo for splash screen
 flutter_native_splash:
   color: "#ffffff"
-  image: "assets/images/app_logo.png"
+  image: "assets/images/neonerds-logos.jpeg"
   android: true
   ios: true   
