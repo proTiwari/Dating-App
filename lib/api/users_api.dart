@@ -46,6 +46,8 @@ class UsersApi {
             strictMode: true)
         .first;
 
+    debugPrint('allUsers: ${allUsers.length}');
+
     // Remove the current user profile - If choosed to see everyone
     if (allUsers.isNotEmpty) {
       allUsers.removeWhere(

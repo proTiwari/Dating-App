@@ -172,60 +172,62 @@ class _DiscoverTabState extends State<DiscoverTab> {
           text: _i18n
               .translate("no_user_found_around_you_please_try_again_later"));
     } else {
-      return Stack(
-        fit: StackFit.expand,
-        children: [
-          /// User card list
-          SwipeStack(
-              key: _swipeKey,
-              children: _users!.map((userDoc) {
-                // Get User object
-                final User user = User.fromDocument(userDoc.data()!);
-                // Return user profile
-                return SwiperItem(
-                    builder: (SwiperPosition position, double progress) {
-                  /// Return User Card
-                  return ProfileCard(
-                      page: 'discover', position: position, user: user);
-                });
-              }).toList(),
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-              translationInterval: 6,
-              scaleInterval: 0.03,
-              stackFrom: StackFrom.None,
-              onEnd: () => debugPrint("onEnd"),
-              onSwipe: (int index, SwiperPosition position) {
-                /// Control swipe position
-                switch (position) {
-                  case SwiperPosition.None:
-                    break;
-                  case SwiperPosition.Left:
+      return Expanded(
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            /// User card list
+            SwipeStack(
+                key: _swipeKey,
+                children: _users!.map((userDoc) {
+                  // Get User object
+                  final User user = User.fromDocument(userDoc.data()!);
+                  // Return user profile
+                  return SwiperItem(
+                      builder: (SwiperPosition position, double progress) {
+                    /// Return User Card
+                    return ProfileCard(
+                        page: 'discover', position: position, user: user);
+                  });
+                }).toList(),
+                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                translationInterval: 6,
+                scaleInterval: 0.03,
+                stackFrom: StackFrom.None,
+                onEnd: () => debugPrint("onEnd"),
+                onSwipe: (int index, SwiperPosition position) {
+                  /// Control swipe position
+                  switch (position) {
+                    case SwiperPosition.None:
+                      break;
+                    case SwiperPosition.Left:
 
-                    /// Swipe Left Dislike profile
-                    _dislikesApi.dislikeUser(
-                        dislikedUserId: _users![index][USER_ID],
-                        onDislikeResult: (r) =>
-                            debugPrint('onDislikeResult: $r'));
+                      /// Swipe Left Dislike profile
+                      _dislikesApi.dislikeUser(
+                          dislikedUserId: _users![index][USER_ID],
+                          onDislikeResult: (r) =>
+                              debugPrint('onDislikeResult: $r'));
 
-                    break;
+                      break;
 
-                  case SwiperPosition.Right:
+                    case SwiperPosition.Right:
 
-                    /// Swipe right and Like profile
-                    _likeUser(context, clickedUserDoc: _users![index]);
+                      /// Swipe right and Like profile
+                      _likeUser(context, clickedUserDoc: _users![index]);
 
-                    break;
-                }
-              }),
+                      break;
+                  }
+                }),
 
-          /// Swipe buttons
-          Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: swipeButtons(context),
-              )),
-        ],
+            /// Swipe buttons
+            Container(
+                margin: const EdgeInsets.only(bottom: 20),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: swipeButtons(context),
+                )),
+          ],
+        ),
       );
     }
   }
