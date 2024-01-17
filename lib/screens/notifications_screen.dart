@@ -79,7 +79,7 @@ class NotificationsScreen extends StatelessWidget {
                   // Handle notification icon
                   late ImageProvider bgImage;
                   if (nType == 'alert') {
-                    bgImage = const AssetImage('assets/images/app_logo3.png');
+                    bgImage = const AssetImage('assets/images/app_logo4.png');
                   } else {
                     bgImage = NetworkImage(notification[N_SENDER_PHOTO_LINK]);
                   }
