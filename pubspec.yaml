@@ -1,5 +1,5 @@
 name: dating_app
-description: Flutter Dating App
+description: NeoNerds
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.1.1+11
+version: 1.1.2+12
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -125,15 +125,15 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 # Generate launcher icons settings  
-flutter_icons:
+flutter_launcher_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/images/neonerds-logos.jpeg"
+  image_path: "assets/images/app_logo4.png"
 
 # Generate app logo for splash screen
 flutter_native_splash:
   color: "#ffffff"
-  image: "assets/images/neonerds-logos.jpeg"
+  image: "assets/images/app_logo4.png"
   android: true
   ios: true   

@@ -31,7 +31,7 @@
     </queries>
 
    <application
-        android:label="Dating App"
+        android:label="NeoNerds"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
