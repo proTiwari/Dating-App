@@ -31,7 +31,7 @@
     </queries>
 
    <application
-        android:label="Dating App"
+        android:label="NeoNerds"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -72,7 +72,7 @@
         <!-- Sample AdMob App ID for test: ca-app-pub-3940256099942544~3347511713 -->  
         <meta-data
           android:name="com.google.android.gms.ads.APPLICATION_ID"
-          android:value="ca-app-pub-3940256099942544~3347511713"/>
+          android:value="ca-app-pub-5107966620975752~7838288498"/>
 
         <!-- Config for Place Picker plugin to use the Passport feature
           Get your Android API Key from your Google Cloud Platform Account

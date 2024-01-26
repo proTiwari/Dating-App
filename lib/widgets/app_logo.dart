@@ -10,7 +10,13 @@ class AppLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Image.asset("assets/images/neonerds-logos.jpeg",
-            width: width ?? 120, height: height ?? 120));
+        child: ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Image.asset(
+        "assets/images/app_logo4.png",
+        width: width ?? 120,
+        height: height ?? 120,
+      ),
+    ));
   }
 }

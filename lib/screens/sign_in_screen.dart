@@ -27,12 +27,7 @@ class _SignInScreenState extends State<SignInScreen> {
       key: _scaffoldKey,
       backgroundColor: Colors.transparent,
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/background_image.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
+       
         child: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(begin: Alignment.bottomRight, colors: [
