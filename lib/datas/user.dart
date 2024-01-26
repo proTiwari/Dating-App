@@ -80,18 +80,20 @@ class User {
       userGallery: doc[USER_GALLERY],
       userCountry: doc[USER_COUNTRY] ?? '',
       userLocality: doc[USER_LOCALITY] ?? '',
-      userGeoPoint: doc[USER_GEO_POINT]['geopoint'],
+      userGeoPoint: doc[USER_GEO_POINT]['geopoint'] is GeoPoint
+          ? doc[USER_GEO_POINT]['geopoint']
+          : GeoPoint(doc[USER_GEO_POINT]['geopoint']['_latitude'] ?? 0, doc[USER_GEO_POINT]['geopoint']['_longitude'] ?? 0),
       userSettings: doc[USER_SETTINGS],
       userStatus: doc[USER_STATUS],
       userIsVerified: doc[USER_IS_VERIFIED] ?? false,
       userLevel: doc[USER_LEVEL],
-      userRegDate: doc[USER_REG_DATE].toDate(), // Firestore Timestamp
-      userLastLogin: doc[USER_LAST_LOGIN].toDate(), // Firestore Timestamp
+      userRegDate: doc[USER_REG_DATE] is Timestamp ? doc[USER_REG_DATE].toDate() : Timestamp(doc[USER_REG_DATE]['_seconds'], doc[USER_REG_DATE]['_nanoseconds']).toDate(), // Firestore Timestamp
+      userLastLogin: doc[USER_LAST_LOGIN] is Timestamp ? doc[USER_LAST_LOGIN].toDate() : Timestamp(doc[USER_LAST_LOGIN]['_seconds'], doc[USER_LAST_LOGIN]['_nanoseconds']).toDate(), // Firestore Timestamp
       userDeviceToken: doc[USER_DEVICE_TOKEN],
       userTotalLikes: doc[USER_TOTAL_LIKES] ?? 0,
       userTotalVisits: doc[USER_TOTAL_VISITS] ?? 0,
       userTotalDisliked: doc[USER_TOTAL_DISLIKED] ?? 0,
-      userHeight: doc[USER_HEIGHT],
+      userHeight: doc[USER_HEIGHT] is double ? doc[USER_HEIGHT] : doc[USER_HEIGHT].toDouble(),
     );
   }
 }

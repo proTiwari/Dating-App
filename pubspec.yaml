@@ -41,7 +41,8 @@ dependencies:
   firebase_auth: 4.12.1  # Used to Authenticate User Account (e.g. Sign in with Phone number, etc..)
   cloud_firestore: 4.12.2 # Used to Save User Data in Database
   firebase_messaging: 14.7.3 # Used to Send Push Notifications (e.g. New like, Visit and Message)
-  firebase_storage: 11.4.1 # Used to Save User Profile Images on Cloud Storage    
+  firebase_storage: 11.4.1 # Used to Save User Profile Images on Cloud Storage
+  cloud_functions: ^4.5.3
   google_mobile_ads: 3.1.0 # Used to Show Admob Ads in App (e.g. Banner Ads, Interstitial Ads (full screen), Native Ads and Rewarded Video Ads)
   # END 
 

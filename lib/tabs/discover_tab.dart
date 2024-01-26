@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dating_app/api/dislikes_api.dart';
 import 'package:dating_app/api/likes_api.dart';
 import 'package:dating_app/api/matches_api.dart';
@@ -39,43 +38,44 @@ class _DiscoverTabState extends State<DiscoverTab> {
   final MatchesApi _matchesApi = MatchesApi();
   final VisitsApi _visitsApi = VisitsApi();
   final UsersApi _usersApi = UsersApi();
-  List<DocumentSnapshot<Map<String, dynamic>>>? _users;
+  List<User>? _users;
+  bool isLoading = false;
   late AppLocalizations _i18n;
 
   /// Get all Users
-  Future<void> _loadUsers(
-      FilterData? filterData,
-      List<DocumentSnapshot<Map<String, dynamic>>> dislikedUsers) async {
-    _usersApi.getUsers(filterData: filterData, dislikedUsers: dislikedUsers).then((users) {
-      // Check result
-      if (users.isNotEmpty) {
+  Future<void> _loadUsers(FilterData? filterData) async {
+    setState(() {
+      isLoading = true;
+    });
+    _matchesApi.getUserMatchesFromFunctions(filterData: filterData, onSuccess: (matches) {
+      if (matches.isNotEmpty) {
         if (mounted) {
-          setState(() => _users = users);
+          setState(() {
+            _users = matches;
+            isLoading = false;
+          });
         }
       } else {
         if (mounted) {
-          setState(() => _users = []);
+          setState(() {
+            _users = [];
+            isLoading = false;
+          });
         }
       }
-      // Debug
-      debugPrint('getUsers() -> ${users.length}');
-      debugPrint('getDislikedUsers() -> ${dislikedUsers.length}');
+    }, onError: (e) {
+      debugPrint('getUserMatchesFromFunctions() -> error: $e');
+      setState(() {
+        _users = [];
+        isLoading = false;
+      });
     });
   }
 
   @override
   void initState() {
     super.initState();
-
-    /// First: Load All Disliked Users to be filtered
-    _dislikesApi.getDislikedUsers(withLimit: false).then(
-        (List<DocumentSnapshot<Map<String, dynamic>>> dislikedUsers) async {
-      /// Validate user max distance
-      await UserModel().checkUserMaxDistance();
-
-      /// Load all users
-      await _loadUsers(AppModel().discoverFilterData, dislikedUsers);
-    });
+    _loadUsers(AppModel().discoverFilterData);
   }
 
   void showFilterBottomSheet() {
@@ -89,14 +89,7 @@ class _DiscoverTabState extends State<DiscoverTab> {
         ),
       ),
       builder: (context) => BottomSheetFilterDiscoverWidget(onFilterDataChanged: (filters) {
-        _dislikesApi.getDislikedUsers(withLimit: false).then(
-                (List<DocumentSnapshot<Map<String, dynamic>>> dislikedUsers) async {
-              /// Validate user max distance
-              await UserModel().checkUserMaxDistance();
-
-              /// Load all users
-              await _loadUsers(filters, dislikedUsers);
-            });
+        _loadUsers(filters);
       },),
     );
   }
@@ -163,7 +156,7 @@ class _DiscoverTabState extends State<DiscoverTab> {
 
   Widget _showUsers() {
     /// Check result
-    if (_users == null) {
+    if (_users == null || isLoading) {
       return Processing(text: _i18n.translate("loading"));
     } else if (_users!.isEmpty) {
       /// No user found
@@ -179,9 +172,8 @@ class _DiscoverTabState extends State<DiscoverTab> {
             /// User card list
             SwipeStack(
                 key: _swipeKey,
-                children: _users!.map((userDoc) {
+                children: _users!.map((user) {
                   // Get User object
-                  final User user = User.fromDocument(userDoc.data()!);
                   // Return user profile
                   return SwiperItem(
                       builder: (SwiperPosition position, double progress) {
@@ -204,7 +196,7 @@ class _DiscoverTabState extends State<DiscoverTab> {
 
                       /// Swipe Left Dislike profile
                       _dislikesApi.dislikeUser(
-                          dislikedUserId: _users![index][USER_ID],
+                          dislikedUserId: _users![index].userId,
                           onDislikeResult: (r) =>
                               debugPrint('onDislikeResult: $r'));
 
@@ -301,7 +293,7 @@ class _DiscoverTabState extends State<DiscoverTab> {
               /// Check card valid index
               if (cardIndex != -1) {
                 /// Get User object
-                final User user = User.fromDocument(_users![cardIndex].data()!);
+                final User user = _users![cardIndex];
 
                 /// Go to profile screen
                 Navigator.of(context).push(MaterialPageRoute(
@@ -323,10 +315,10 @@ class _DiscoverTabState extends State<DiscoverTab> {
 
   /// Like user function
   Future<void> _likeUser(BuildContext context,
-      {required DocumentSnapshot<Map<String, dynamic>> clickedUserDoc}) async {
+      {required User clickedUserDoc}) async {
     /// Check match first
     await _matchesApi.checkMatch(
-        userId: clickedUserDoc[USER_ID],
+        userId: clickedUserDoc.userId,
         onMatchResult: (result) {
           if (result) {
             /// It`s match - show dialog to ask user to chat or continue playing
@@ -336,7 +328,7 @@ class _DiscoverTabState extends State<DiscoverTab> {
                 builder: (context) {
                   return ItsMatchDialog(
                     swipeKey: _swipeKey,
-                    matchedUser: User.fromDocument(clickedUserDoc.data()!),
+                    matchedUser: clickedUserDoc,
                   );
                 });
           }
@@ -344,8 +336,8 @@ class _DiscoverTabState extends State<DiscoverTab> {
 
     /// like profile
     await _likesApi.likeUser(
-        likedUserId: clickedUserDoc[USER_ID],
-        userDeviceToken: clickedUserDoc[USER_DEVICE_TOKEN],
+        likedUserId: clickedUserDoc.userId,
+        userDeviceToken: clickedUserDoc.userDeviceToken,
         nMessage: "${UserModel().user.userFullname.split(' ')[0]}, "
             "${_i18n.translate("liked_your_profile_click_and_see")}",
         onLikeResult: (result) {
