@@ -27,10 +27,10 @@ class DiscoverTab extends StatefulWidget {
   const DiscoverTab({Key? key}) : super(key: key);
 
   @override
-  _DiscoverTabState createState() => _DiscoverTabState();
+  DiscoverTabState createState() => DiscoverTabState();
 }
 
-class _DiscoverTabState extends State<DiscoverTab> {
+class DiscoverTabState extends State<DiscoverTab> {
   // Variables
   final GlobalKey<SwipeStackState> _swipeKey = GlobalKey<SwipeStackState>();
   final LikesApi _likesApi = LikesApi();
@@ -43,7 +43,7 @@ class _DiscoverTabState extends State<DiscoverTab> {
   late AppLocalizations _i18n;
 
   /// Get all Users
-  Future<void> _loadUsers(FilterData? filterData) async {
+  Future<void> loadUsers(FilterData? filterData) async {
     setState(() {
       isLoading = true;
     });
@@ -75,23 +75,7 @@ class _DiscoverTabState extends State<DiscoverTab> {
   @override
   void initState() {
     super.initState();
-    _loadUsers(AppModel().discoverFilterData);
-  }
-
-  void showFilterBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-      ),
-      builder: (context) => BottomSheetFilterDiscoverWidget(onFilterDataChanged: (filters) {
-        _loadUsers(filters);
-      },),
-    );
+    loadUsers(AppModel().discoverFilterData);
   }
 
   @override
@@ -107,48 +91,6 @@ class _DiscoverTabState extends State<DiscoverTab> {
           color: borderColor.withOpacity(0.5),
         ),
       ),
-      SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(width: 16),
-            Spacer(),
-          ScopedModelDescendant<AppModel>(rebuildOnChange: true, builder: (context, child, model) {
-            return InkWell(
-              borderRadius: BorderRadius.circular(10),
-              onTap: () {
-                showFilterBottomSheet();
-              },
-
-              child: Badge(
-                largeSize: 20,
-                backgroundColor: APP_PRIMARY_COLOR,
-                isLabelVisible: (model.discoverFilterData?.getAppliedFilterCount() ?? 0) > 0,
-                label: Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: Text(
-                    AppModel().discoverFilterData?.getAppliedFilterCount().toString() ?? '',
-                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: EdgeInsets.all(8),
-                  child: Icon(Icons.sort, color: APP_PRIMARY_COLOR, size: 30),
-                ),
-              ),
-            );
-          }),
-
-            SizedBox(width: 16),
-          ],
-        ),
-      ),
-      SizedBox(height: 16,),
       _showUsers(),
 
     ],);

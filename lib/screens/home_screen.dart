@@ -25,6 +25,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+import '../components/bottom_sheet_filter_discover.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -43,16 +45,34 @@ class _HomeScreenState extends State<HomeScreen> {
   // in_app_purchase stream
   late StreamSubscription<List<PurchaseDetails>> _inAppPurchaseStream;
 
+  final GlobalKey<DiscoverTabState> discoverTabKey = GlobalKey();
+
   /// Tab navigation
   Widget _showCurrentNavBar() {
     List<Widget> options = <Widget>[
-      const DiscoverTab(),
+      DiscoverTab(key: discoverTabKey,),
       const MatchesTab(),
       const ConversationsTab(),
       const ProfileTab()
     ];
 
     return options.elementAt(_selectedIndex);
+  }
+
+  void showFilterBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+      ),
+      builder: (context) => BottomSheetFilterDiscoverWidget(onFilterDataChanged: (filters) {
+        discoverTabKey.currentState?.loadUsers(filters);
+      },),
+    );
   }
 
   /// Update selected tab
@@ -262,7 +282,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Go to Notifications Screen
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => NotificationsScreen()));
-              })
+              }),
+          _selectedIndex == 0 ?
+          ScopedModelDescendant<AppModel>(rebuildOnChange: true, builder: (context, child, model) {
+            return InkWell(
+              borderRadius: BorderRadius.circular(10),
+              onTap: () {
+                showFilterBottomSheet();
+              },
+
+              child: Badge(
+                largeSize: 20,
+                backgroundColor: APP_PRIMARY_COLOR,
+                isLabelVisible: (model.discoverFilterData?.getAppliedFilterCount() ?? 0) > 0,
+                label: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text(
+                    AppModel().discoverFilterData?.getAppliedFilterCount().toString() ?? '',
+                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Icon(Icons.sort, color: APP_PRIMARY_COLOR, size: 30),
+                ),
+              ),
+            );
+          }) : Container(),
+          SizedBox(width: 10),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
