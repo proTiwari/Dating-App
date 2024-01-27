@@ -276,13 +276,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
+          _selectedIndex != 0 ?
           IconButton(
               icon: _getNotificationCounter(),
               onPressed: () async {
                 // Go to Notifications Screen
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => NotificationsScreen()));
-              }),
+              }): Container(),
+
           _selectedIndex == 0 ?
           ScopedModelDescendant<AppModel>(rebuildOnChange: true, builder: (context, child, model) {
             return InkWell(
@@ -304,11 +306,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: EdgeInsets.all(8),
-                  child: Icon(Icons.sort, color: APP_PRIMARY_COLOR, size: 30),
+                  padding: EdgeInsets.all(2),
+                  child: Icon(Icons.sort, size: 30),
                 ),
               ),
             );
