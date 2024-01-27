@@ -306,10 +306,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Container(
                   decoration: BoxDecoration(
+                    color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: EdgeInsets.all(2),
-                  child: Icon(Icons.sort, size: 30),
+                  padding: EdgeInsets.all(8),
+                  child: Icon(Icons.sort, color: APP_PRIMARY_COLOR, size: 30),
                 ),
               ),
             );
