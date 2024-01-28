@@ -104,19 +104,22 @@ class _ProfileLikesScreenState extends State<ProfileLikesScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(_i18n.translate("likes")),
+          title: Text(_i18n.translate("likes"), style: const TextStyle(color: Colors.black87)),
         ),
-        body: Column(
-          children: [
-            /// Header Title
-            BuildTitle(
-              svgIconName: "heart_icon",
-              title: _i18n.translate("users_who_liked_you"),
-            ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              /// Header Title
+              BuildTitle(
+                svgIconName: "heart_2_icon",
+                title: _i18n.translate("users_who_liked_you"),
+              ),
 
-            /// Matches
-            Expanded(child: _showProfiles())
-          ],
+              /// Matches
+              Expanded(child: _showProfiles())
+            ],
+          ),
         ));
   }
 

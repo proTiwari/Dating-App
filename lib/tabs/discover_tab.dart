@@ -155,7 +155,7 @@ class DiscoverTabState extends State<DiscoverTab> {
 
             /// Swipe buttons
             Container(
-                margin: const EdgeInsets.only(bottom: 20),
+                margin: const EdgeInsets.only(bottom: 34),
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: swipeButtons(context),
@@ -188,9 +188,9 @@ class DiscoverTabState extends State<DiscoverTab> {
 
         /// Swipe left and reject user
         cicleButton(
-            bgColor: Colors.white,
-            padding: 8,
-            icon: const Icon(Icons.close, size: 35, color: Colors.grey),
+            bgColor: lightRedColor,
+            padding: 10,
+            icon: const Icon(Icons.close, size: 31, color: redColor),
             onTap: () {
               /// Get card current index
               final cardIndex = _swipeKey.currentState!.currentIndex;
@@ -206,10 +206,9 @@ class DiscoverTabState extends State<DiscoverTab> {
 
         /// Swipe right and like user
         cicleButton(
-            bgColor: Colors.white,
-            padding: 8,
-            icon: Icon(Icons.favorite_border,
-                size: 35, color: Theme.of(context).primaryColor),
+            bgColor: lightGrassGreenColor,
+            padding: 10,
+            icon: const Icon(Icons.favorite, size: 31, color: grassGreenColor),
             onTap: () async {
               /// Get card current index
               final cardIndex = _swipeKey.currentState!.currentIndex;

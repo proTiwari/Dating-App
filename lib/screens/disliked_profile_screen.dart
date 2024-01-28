@@ -105,19 +105,22 @@ class _DislikedProfilesScreenState extends State<DislikedProfilesScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(_i18n.translate("disliked_profiles")),
+          title: Text(_i18n.translate("disliked_profiles"), style: const TextStyle(color: Colors.black87)),
         ),
-        body: Column(
-          children: [
-            /// Header Title
-            BuildTitle(
-              svgIconName: "close_icon",
-              title: _i18n.translate("profiles_you_rejected"),
-            ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              /// Header Title
+              BuildTitle(
+                svgIconName: "close_icon",
+                title: _i18n.translate("profiles_you_rejected"),
+              ),
 
-            /// Matches
-            Expanded(child: _showProfiles())
-          ],
+              /// Matches
+              Expanded(child: _showProfiles())
+            ],
+          ),
         ));
   }
 

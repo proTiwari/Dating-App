@@ -27,8 +27,7 @@ class ProfileBasicInfoCard extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       physics: const ScrollPhysics(),
       child: Card(
-        color: Theme.of(context).primaryColor,
-        elevation: 4.0,
+        surfaceTintColor: Theme.of(context).primaryColor,
         shape: defaultCardBorder(),
         child: Container(
           padding: const EdgeInsets.all(10.0),
@@ -61,18 +60,18 @@ class ProfileBasicInfoCard extends StatelessWidget {
                       Text(
                         "${UserModel().user.userFullname.split(' ')[0]}, "
                         "${userAge.toString()}",
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                            color: Theme.of(context).primaryColor),
                       ),
                       const SizedBox(height: 5),
 
                       /// Location
                       Row(
                         children: [
-                          const SvgIcon("assets/icons/location_point_icon.svg",
-                              color: Colors.white),
+                          SvgIcon("assets/icons/location_point_icon.svg",
+                              color: Theme.of(context).primaryColor),
                           const SizedBox(width: 5),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,10 +79,10 @@ class ProfileBasicInfoCard extends StatelessWidget {
                             children: [
                               // City
                               Text("${UserModel().user.userLocality},",
-                                  style: const TextStyle(color: Colors.white)),
+                                  style: TextStyle(color: Theme.of(context).primaryColor)),
                               // Country
                               Text(UserModel().user.userCountry,
-                                  style: const TextStyle(color: Colors.white)),
+                                  style: TextStyle(color: Theme.of(context).primaryColor)),
                             ],
                           )
                         ],
@@ -101,12 +100,12 @@ class ProfileBasicInfoCard extends StatelessWidget {
                   SizedBox(
                     height: 30,
                     child: OutlinedButton.icon(
-                        icon: const Icon(Icons.remove_red_eye, color: Colors.white),
+                        icon: Icon(Icons.remove_red_eye, color: Theme.of(context).primaryColor),
                         label: Text(i18n.translate("view"),
-                            style: const TextStyle(color: Colors.white)),
+                            style: TextStyle(color: Theme.of(context).primaryColor)),
                         style: ButtonStyle(
                             side: MaterialStateProperty.all<BorderSide>(
-                                const BorderSide(color: Colors.white)),
+                                BorderSide(color: Theme.of(context).primaryColor)),
                             shape: MaterialStateProperty.all<OutlinedBorder>(
                                 RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(28),
@@ -119,7 +118,7 @@ class ProfileBasicInfoCard extends StatelessWidget {
                         }),
                   ),
                   cicleButton(
-                    bgColor: APP_ACCENT_COLOR,
+                    bgColor: Theme.of(context).primaryColor,
                     padding: 13,
                     icon: const SvgIcon("assets/icons/settings_icon.svg",
                         color: Colors.white, width: 30, height: 30),
@@ -132,18 +131,18 @@ class ProfileBasicInfoCard extends StatelessWidget {
                   SizedBox(
                     height: 35,
                     child: TextButton.icon(
-                        icon: Icon(Icons.edit,
-                            color: Theme.of(context).primaryColor),
+                        icon: const Icon(Icons.edit,
+                            color: Colors.white),
                         style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
+                                MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
                             shape: MaterialStateProperty.all<OutlinedBorder>(
                                 RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(28),
                             ))),
                         label: Text(i18n.translate("edit"),
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor)),
+                            style: const TextStyle(
+                                color: Colors.white,)),
                         onPressed: () {
                           /// Go to edit profile screen
                           Navigator.of(context).push(MaterialPageRoute(

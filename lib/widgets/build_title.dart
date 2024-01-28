@@ -17,15 +17,15 @@ class BuildTitle extends StatelessWidget {
           // Display SVG icon
           if (svgIconName != null) 
           SvgIcon("assets/icons/$svgIconName.svg",
-              color: Theme.of(context).primaryColor, width: 30, height: 30),
+              color: Colors.black87, width: 25, height: 25),
   
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(title,
                 style: TextStyle(
-                    fontSize: 18,
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.w600)),
+                    fontSize: 24,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w900)),
           )
         ],
       ),

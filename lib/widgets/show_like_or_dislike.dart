@@ -1,4 +1,5 @@
 import 'package:dating_app/plugins/swipe_stack/swipe_stack.dart';
+import 'package:dating_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class ShowLikeOrDislike extends StatelessWidget {
@@ -14,16 +15,13 @@ class ShowLikeOrDislike extends StatelessWidget {
       child: RotationTransition(
         turns: const AlwaysStoppedAnimation(-15 / 360),
         child: Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.green, width: 4),
-            borderRadius: BorderRadius.circular(8),
+            shape: BoxShape.circle,
+            color: lightGrassGreenColor,
           ),
-          child: const Text('LIKE',
-              style: TextStyle(
-                  fontSize: 50,
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold)),
+          child: const Icon(Icons.favorite,
+              size: 50, color: grassGreenColor, semanticLabel: 'LIKE'),
         ),
       ),
     );
@@ -36,16 +34,13 @@ class ShowLikeOrDislike extends StatelessWidget {
       child: RotationTransition(
         turns: const AlwaysStoppedAnimation(15 / 360),
         child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.red, width: 4),
-            borderRadius: BorderRadius.circular(8),
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: lightRedColor,
           ),
-          child: const Text('DISLIKE',
-              style: TextStyle(
-                  fontSize: 50,
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold)),
+          child: const Icon(Icons.close,
+              size: 50, color: redColor, semanticLabel: 'DISLIKE'),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:dating_app/datas/user.dart';
 import 'package:dating_app/dialogs/report_dialog.dart';
 import 'package:dating_app/models/user_model.dart';
 import 'package:dating_app/plugins/swipe_stack/swipe_stack.dart';
+import 'package:dating_app/utils/colors.dart';
 import 'package:dating_app/widgets/custom_badge.dart';
 import 'package:dating_app/widgets/default_card_border.dart';
 import 'package:dating_app/widgets/show_like_or_dislike.dart';
@@ -47,15 +48,16 @@ class ProfileCard extends StatelessWidget {
     // Build profile card
     return Padding(
       key: UniqueKey(),
-      padding: const EdgeInsets.all(9.0),
+      padding: const EdgeInsets.all(16.0),
       child: Stack(
         children: [
           /// User Card
           Card(
             clipBehavior: Clip.antiAlias,
-            elevation: 4.0,
             margin: const EdgeInsets.all(0),
-            shape: defaultCardBorder(),
+            shape: defaultCardBorder().copyWith(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
             child: Container(
               decoration: BoxDecoration(
                 /// User profile image
@@ -79,7 +81,7 @@ class ProfileCard extends StatelessWidget {
                 /// User info container
                 child: Container(
                   alignment: Alignment.bottomLeft,
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,12 +192,13 @@ class ProfileCard extends StatelessWidget {
             top: 10,
             left: page == 'discover' ? 8 : 5,
             child: CustomBadge(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 icon: page == 'discover'
                     ? const SvgIcon("assets/icons/location_point_icon.svg",
                         color: Colors.white, width: 15, height: 15)
                     : null,
                 text:
-                    '${_appHelper.getDistanceBetweenUsers(userLat: user.userGeoPoint.latitude, userLong: user.userGeoPoint.longitude)}km'),
+                    '${_appHelper.getDistanceBetweenUsers(userLat: user.userGeoPoint.latitude, userLong: user.userGeoPoint.longitude)} km'),
           ),
 
           /// Show Like or Dislike
@@ -224,8 +227,15 @@ class ProfileCard extends StatelessWidget {
               ? Positioned(
                   right: 0,
                   child: IconButton(
-                      icon: Icon(Icons.flag,
-                          color: Theme.of(context).primaryColor, size: 32),
+                      icon: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: redColor.withOpacity(0.2),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(Icons.flag_rounded,
+                            color: Theme.of(context).primaryColor, size: 26),
+                      ),
                       onPressed: () =>
                           ReportDialog(userId: user.userId).show()))
               : const SizedBox(width: 0, height: 0),

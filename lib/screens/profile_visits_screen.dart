@@ -102,19 +102,22 @@ class _ProfileVisitsScreenState extends State<ProfileVisitsScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(_i18n.translate("visits")),
+          title: Text(_i18n.translate("visits"), style: const TextStyle(color: Colors.black87)),
         ),
-        body: Column(
-          children: [
-            /// Header Title
-            BuildTitle(
-              svgIconName: "eye_icon",
-              title: _i18n.translate("users_who_visited_you"),
-            ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              /// Header Title
+              BuildTitle(
+                svgIconName: "eye_icon",
+                title: _i18n.translate("users_who_visited_you"),
+              ),
 
-            /// Matches
-            Expanded(child: _showProfiles())
-          ],
+              /// Matches
+              Expanded(child: _showProfiles())
+            ],
+          ),
         ));
   }
 

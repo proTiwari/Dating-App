@@ -32,8 +32,9 @@ class NoData extends StatelessWidget {
         children: <Widget>[
           // Show icon
           _icon,
+          SizedBox(height: 20),
           Text(text,
-              style: const TextStyle(fontSize: 18), textAlign: TextAlign.center),
+              style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
         ],
       ),
     );

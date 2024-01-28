@@ -40,17 +40,20 @@ class _MatchesTabState extends State<MatchesTab> {
     /// Initialization
     _i18n = AppLocalizations.of(context);
 
-    return Column(
-      children: [
-        /// Header
-        BuildTitle(
-          svgIconName: 'heart_icon',
-          title: _i18n.translate("matches"),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          /// Header
+          BuildTitle(
+            svgIconName: 'heart_2_icon',
+            title: _i18n.translate("matches"),
+          ),
 
-        /// Show matches
-        Expanded(child: _showMatches()),
-      ],
+          /// Show matches
+          Expanded(child: _showMatches()),
+        ],
+      ),
     );
   }
 

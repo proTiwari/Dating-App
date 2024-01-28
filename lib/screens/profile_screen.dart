@@ -74,6 +74,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
         key: _scaffoldKey,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme:
+          IconThemeData(color: Theme.of(context).primaryColor),
+          actions: <Widget>[
+            // Check the current User ID
+            if (UserModel().user.userId != widget.user.userId)
+              IconButton(
+                icon: Icon(Icons.flag,
+                    color: Theme.of(context).primaryColor, size: 32),
+                // Report/Block profile dialog
+                onPressed: () =>
+                    ReportDialog(userId: widget.user.userId).show(),
+              )
+          ],
+        ),
         body: ScopedModelDescendant<UserModel>(
             builder: (context, child, userModel) {
           return Stack(
@@ -97,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     /// Profile details
                     Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -144,7 +161,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       width: 15,
                                       height: 15),
                                   text:
-                                      '${_appHelper.getDistanceBetweenUsers(userLat: widget.user.userGeoPoint.latitude, userLong: widget.user.userGeoPoint.longitude)}km')
+                                      '${_appHelper.getDistanceBetweenUsers(userLat: widget.user.userGeoPoint.latitude, userLong: widget.user.userGeoPoint.longitude)} km')
                             ],
                           ),
 
@@ -153,12 +170,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           /// Home location
                           _rowProfileInfo(
                             context,
-                            icon: SvgIcon(
+                            icon: const SvgIcon(
                                 "assets/icons/location_point_icon.svg",
-                                color: Theme.of(context).primaryColor,
+                                color: Colors.black87,
                                 width: 24,
                                 height: 24),
-                            title:
+                            title: 'Location',
+                            value:
                                 "${widget.user.userLocality}, ${widget.user.userCountry}",
                           ),
 
@@ -166,45 +184,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                           /// Height title
                           widget.user.userHeight != null ? _rowProfileInfo(context,
-                              icon: SvgIcon("assets/icons/job_bag_icon.svg",
-                                  color: Theme.of(context).primaryColor,
-                                  width: 27,
-                                  height: 27),
-                              title: widget.user.userJobTitle) : Container(),
+                              icon: const Icon(Icons.height,
+                                  color: Colors.black87,
+                                  size: 28),
+                              title: _i18n.translate('height'),
+                              value: widget.user.userHeight.toString()) : Container(),
 
                           SizedBox(height: widget.user.userHeight != null ? 5 : 0),
 
                           /// Birthday
                           _rowProfileInfo(context,
-                              icon: SvgIcon("assets/icons/gift_icon.svg",
-                                  color: Theme.of(context).primaryColor,
+                              icon: const SvgIcon("assets/icons/gift_icon.svg",
+                                  color: Colors.black87,
                                   width: 28,
                                   height: 28),
-                              title:
-                                  '${_i18n.translate('birthday')} ${widget.user.userBirthYear}/${widget.user.userBirthMonth}/${widget.user.userBirthDay}'),
+                              title: _i18n.translate('birthday'),
+                              value:
+                                  '${widget.user.userBirthYear}/${widget.user.userBirthMonth}/${widget.user.userBirthDay}'),
 
                           /// Join date
                           _rowProfileInfo(context,
-                              icon: SvgIcon("assets/icons/info_icon.svg",
-                                  color: Theme.of(context).primaryColor,
+                              icon: const SvgIcon("assets/icons/info_icon.svg",
+                                  color: Colors.black87,
                                   width: 28,
                                   height: 28),
-                              title:
-                                  '${_i18n.translate('join_date')} ${timeago.format(widget.user.userRegDate)}'),
+                              title: _i18n.translate('join_date'),
+                              value: timeago.format(widget.user.userRegDate)),
 
                           const Divider(),
 
                           /// Profile bio
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(_i18n.translate("bio"),
-                                style: TextStyle(
+                          ListTile(
+                            title: Text(_i18n.translate("bio"),
+                                style: const TextStyle(
                                     fontSize: 22,
-                                    color: Theme.of(context).primaryColor)),
+                                    color: Colors.black87)),
+                            subtitle: Text(widget.user.userBio,
+                                style: const TextStyle(
+                                    fontSize: 18, color: Colors.grey)),
                           ),
-                          Text(widget.user.userBio,
-                              style: const TextStyle(
-                                  fontSize: 18, color: Colors.grey)),
                         ],
                       ),
                     ),
@@ -212,7 +230,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
 
-              /// AppBar to return back
+              /*/// AppBar to return back
               Positioned(
                 top: 0.0,
                 left: 0.0,
@@ -234,7 +252,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       )
                   ],
                 ),
-              ),
+              ),*/
             ],
           );
         }),
@@ -243,16 +261,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _rowProfileInfo(BuildContext context,
-      {required Widget icon, required String title}) {
-    return Row(
-      children: [
-        icon,
-        const SizedBox(width: 10),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(title, style: const TextStyle(fontSize: 19)),
-        ),
-      ],
+      {required Widget icon, required String title, required String value}) {
+    return ListTile(
+      leading: icon,
+      title: Text(title,
+          style: const TextStyle(fontSize: 18, color: Colors.black87)),
+      subtitle: Text(value,
+          style: const TextStyle(fontSize: 16, color: Colors.grey)),
     );
   }
 

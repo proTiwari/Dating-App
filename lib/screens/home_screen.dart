@@ -367,7 +367,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Count unread notifications
   Widget _getNotificationCounter() {
     // Set icon
-    const icon = Icon(Icons.notifications, size: 30,);
+    const icon = Icon(Icons.notifications_outlined, size: 30,);
 
     /// Handle stream
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(

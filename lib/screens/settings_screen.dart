@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+import '../utils/colors.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
@@ -115,7 +117,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(_i18n.translate("settings")),
+          title: Text(_i18n.translate("settings"), style: const TextStyle(color: Colors.black87)),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 20),
@@ -125,284 +127,312 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 /// Passport feature
                 /// Travel to any Country or City and Swipe Women there!
-                Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    elevation: 2.0,
-                    shadowColor: Theme.of(context).primaryColor,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(_i18n.translate("passport"),
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.flight,
-                              color: Theme.of(context).primaryColor, size: 40),
-                          title: Text(_i18n.translate(
-                              "travel_to_any_country_or_city_and_match_with_people_there")),
-                          trailing: TextButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Theme.of(context).primaryColor),
-                            ),
-                            child: Text(_i18n.translate("travel_now"),
-                                style: const TextStyle(color: Colors.white)),
-                            onPressed: () async {
-                              // // Check User VIP Account Status
-                              if (UserModel().userIsVip) {
-                                // Go to passport screen
-                                _goToPassportScreen();
-                              } else {
-                                /// Show VIP dialog
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => const VipDialog());
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    )),
-                const SizedBox(height: 20),
-
-                /// User current location
-                Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(_i18n.translate("your_current_location"),
-                              style: const TextStyle(fontSize: 18)),
-                        ),
-                        ListTile(
-                          leading: SvgIcon(
-                              "assets/icons/location_point_icon.svg",
-                              color: Theme.of(context).primaryColor),
-                          title: Text(
-                              '${UserModel().user.userCountry}, ${UserModel().user.userLocality}'),
-                          trailing: TextButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Theme.of(context).primaryColor),
-                            ),
-                            child: Text(_i18n.translate("UPDATE"),
-                                style: const TextStyle(color: Colors.white)),
-                            onPressed: () async {
-                              /// Update user location: Country & City an Geo Data
-                              _updateUserLocation(false);
-                            },
-                          ),
-                        ),
-                      ],
-                    )),
-                const SizedBox(height: 15),
-
-                /// User Max distance
-                Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                  '${_i18n.translate("maximum_distance")} ${_selectedMaxDistance.round()} km',
-                                  style: const TextStyle(fontSize: 18)),
-                              const SizedBox(height: 3),
-                              Text(
-                                  _i18n.translate(
-                                      "show_people_within_this_radius"),
-                                  style: const TextStyle(color: Colors.grey)),
-                            ],
-                          ),
-                        ),
-                        Slider(
-                          activeColor: Theme.of(context).primaryColor,
-                          value: _selectedMaxDistance,
-                          label:
-                              _selectedMaxDistance.round().toString() + ' km',
-                          divisions: 100,
-                          min: 0,
-
-                          /// Check User VIP Account to set max distance available
-                          /*max: UserModel().userIsVip
-                              ? AppModel().appInfo.vipAccountMaxDistance
-                              : AppModel().appInfo.freeAccountMaxDistance,*/
-                          max: AppModel().appInfo.vipAccountMaxDistance,
-                          onChanged: (radius) {
-                            setState(() {
-                              _selectedMaxDistance = radius;
-                            });
-                            // debug
-                            debugPrint('_selectedMaxDistance: '
-                                '${radius.toStringAsFixed(2)}');
-                          },
-                          onChangeEnd: (radius) {
-                            /// Update user max distance
-                            UserModel().updateUserData(
-                                userId: UserModel().user.userId,
-                                data: {
-                                  '$USER_SETTINGS.$USER_MAX_DISTANCE':
-                                      double.parse(radius.toStringAsFixed(2))
-                                }).then((_) {
-                              debugPrint(
-                                  'User max distance updated -> ${radius.toStringAsFixed(2)}');
-                            });
-                          },
-                        ),
-                        // Show message for non VIP user
-                        /*UserModel().userIsVip
-                            ? const SizedBox(width: 0, height: 0)
-                            : Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                    "${_i18n.translate("need_more_radius_away")} "
-                                    "${AppModel().appInfo.vipAccountMaxDistance} km "
-                                    "${_i18n.translate('radius_away')}",
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor)),
-                              ),*/
-                      ],
-                    )),
-                const SizedBox(height: 15),
-
-                // User age range
-                Card(
-                    child: Column(
+                /*Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ListTile(
-                      title: Text(_i18n.translate("age_range"),
-                          style: const TextStyle(fontSize: 19)),
-                      subtitle: Text(
-                          _i18n.translate("show_people_within_this_age_range")),
-                      trailing: Text(
-                          "${_selectedAgeRange.start.toStringAsFixed(0)} - "
-                          "${_selectedAgeRange.end.toStringAsFixed(0)}",
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: Text(_i18n.translate("passport"),
                           style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                              fontSize: 18,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold)),
                     ),
-                    RangeSlider(
-                        activeColor: Theme.of(context).primaryColor,
-                        values: _selectedAgeRange,
-                        labels: _selectedAgeRangeLabels,
-                        divisions: 100,
-                        min: 18,
-                        max: 100,
-                        onChanged: (newRange) {
-                          // Update state
-                          setState(() {
-                            _selectedAgeRange = newRange;
-                            _selectedAgeRangeLabels = RangeLabels(
-                                newRange.start.toStringAsFixed(0),
-                                newRange.end.toStringAsFixed(0));
-                          });
-                          debugPrint('_selectedAgeRange: $_selectedAgeRange');
+                    ListTile(
+                      leading: Icon(Icons.flight,
+                          color: Theme.of(context).primaryColor, size: 40),
+                      title: Text(_i18n.translate(
+                          "travel_to_any_country_or_city_and_match_with_people_there")),
+                      trailing: TextButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).primaryColor),
+                        ),
+                        child: Text(_i18n.translate("travel_now"),
+                            style: const TextStyle(color: Colors.white)),
+                        onPressed: () async {
+                          // // Check User VIP Account Status
+                          if (UserModel().userIsVip) {
+                            // Go to passport screen
+                            _goToPassportScreen();
+                          } else {
+                            /// Show VIP dialog
+                            showDialog(
+                                context: context,
+                                builder: (context) => const VipDialog());
+                          }
                         },
-                        onChangeEnd: (endValues) {
-                          /// Update age range
-                          ///
-                          /// Get start value
-                          final int minAge =
-                              int.parse(endValues.start.toStringAsFixed(0));
-
-                          /// Get end value
-                          final int maxAge =
-                              int.parse(endValues.end.toStringAsFixed(0));
-
-                          // Update age range
-                          UserModel().updateUserData(
-                              userId: UserModel().user.userId,
-                              data: {
-                                '$USER_SETTINGS.$USER_MIN_AGE': minAge,
-                                '$USER_SETTINGS.$USER_MAX_AGE': maxAge,
-                              }).then((_) {
-                            debugPrint('Age range updated');
-                          });
-                        })
-                  ],
-                )),
-
-                const SizedBox(height: 15),
-                // Show me option
-                Card(
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.wc_outlined,
-                      color: Theme.of(context).primaryColor,
-                      size: 30,
+                      ),
                     ),
-                    title: Text(_i18n.translate('show_me'),
-                        style: const TextStyle(fontSize: 18)),
-                    trailing: Text(_showMeOption(_i18n),
-                        style: const TextStyle(fontSize: 18)),
-                    onTap: () {
-                      /// Choose Show me option
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) {
-                            return ShowMeDialog();
-                          });
-                    },
-                  ),
+                  ],
                 ),
 
-                const SizedBox(height: 15),
 
-                /// Hide user profile setting
-                Card(
-                  child: ListTile(
-                    leading: _hideProfile
-                        ? Icon(Icons.visibility_off,
-                            color: Theme.of(context).primaryColor, size: 30)
-                        : Icon(Icons.visibility,
-                            color: Theme.of(context).primaryColor, size: 30),
-                    title: Text(_i18n.translate('hide_profile'),
-                        style: const TextStyle(fontSize: 18)),
-                    subtitle: _hideProfile
-                        ? Text(
-                            _i18n.translate(
-                                'your_profile_is_hidden_on_discover_tab'),
-                            style: const TextStyle(color: Colors.red),
-                          )
-                        : Text(
-                            _i18n.translate(
-                                'your_profile_is_visible_on_discover_tab'),
-                            style: const TextStyle(color: Colors.green)),
-                    trailing: Switch(
+                SizedBox(height: 16,),
+                Divider(
+                  indent: 3,
+                  height: 1,
+                  color: borderColor.withOpacity(0.5),
+                ),
+                SizedBox(height: 16,),*/
+
+                /// User current location
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: Text(_i18n.translate("your_current_location"),
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                    ),
+                    ListTile(
+                      leading: SvgIcon(
+                          "assets/icons/location_point_icon.svg",
+                          color: Theme.of(context).primaryColor),
+                      title: Text(
+                          '${UserModel().user.userCountry}, ${UserModel().user.userLocality}'),
+                      trailing: TextButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).primaryColor),
+                        ),
+                        child: Text(_i18n.translate("UPDATE"),
+                            style: const TextStyle(color: Colors.white)),
+                        onPressed: () async {
+                          /// Update user location: Country & City an Geo Data
+                          _updateUserLocation(false);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 16,),
+                Divider(
+                  indent: 3,
+                  height: 1,
+                  color: borderColor.withOpacity(0.5),
+                ),
+                SizedBox(height: 16,),
+
+                /// User Max distance
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                              '${_i18n.translate("maximum_distance")} ${_selectedMaxDistance.round()} km',
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                          const SizedBox(height: 3),
+                          Text(
+                              _i18n.translate(
+                                  "show_people_within_this_radius"),
+                              style: const TextStyle(color: Colors.grey)),
+                        ],
+                      ),
+                    ),
+                    Slider(
                       activeColor: Theme.of(context).primaryColor,
-                      value: _hideProfile,
-                      onChanged: (newValue) {
-                        // Update UI
-                        setState(() {
-                          _hideProfile = newValue;
-                        });
-                        // User status
-                        String userStatus = 'active';
-                        // Check status
-                        if (newValue) {
-                          userStatus = 'hidden';
-                        }
+                      value: _selectedMaxDistance,
+                      label:
+                          _selectedMaxDistance.round().toString() + ' km',
+                      divisions: 100,
+                      min: 0,
 
-                        // Update profile status
+                      /// Check User VIP Account to set max distance available
+                      /*max: UserModel().userIsVip
+                          ? AppModel().appInfo.vipAccountMaxDistance
+                          : AppModel().appInfo.freeAccountMaxDistance,*/
+                      max: AppModel().appInfo.vipAccountMaxDistance,
+                      onChanged: (radius) {
+                        setState(() {
+                          _selectedMaxDistance = radius;
+                        });
+                        // debug
+                        debugPrint('_selectedMaxDistance: '
+                            '${radius.toStringAsFixed(2)}');
+                      },
+                      onChangeEnd: (radius) {
+                        /// Update user max distance
                         UserModel().updateUserData(
                             userId: UserModel().user.userId,
-                            data: {USER_STATUS: userStatus}).then((_) {
-                          debugPrint('Profile hidden: $newValue');
+                            data: {
+                              '$USER_SETTINGS.$USER_MAX_DISTANCE':
+                                  double.parse(radius.toStringAsFixed(2))
+                            }).then((_) {
+                          debugPrint(
+                              'User max distance updated -> ${radius.toStringAsFixed(2)}');
                         });
                       },
                     ),
+                    // Show message for non VIP user
+                    /*UserModel().userIsVip
+                        ? const SizedBox(width: 0, height: 0)
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                                "${_i18n.translate("need_more_radius_away")} "
+                                "${AppModel().appInfo.vipAccountMaxDistance} km "
+                                "${_i18n.translate('radius_away')}",
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor)),
+                          ),*/
+                  ],
+                ),
+
+                SizedBox(height: 16,),
+                Divider(
+                  indent: 3,
+                  height: 1,
+                  color: borderColor.withOpacity(0.5),
+                ),
+                SizedBox(height: 16,),
+
+                // User age range
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                ListTile(
+                  title: Text(_i18n.translate("age_range"),
+                      style: const TextStyle(fontSize: 18, color: Colors.black87, fontWeight: FontWeight.bold)),
+                  subtitle: Text(
+                      _i18n.translate("show_people_within_this_age_range")),
+                  trailing: Text(
+                      "${_selectedAgeRange.start.toStringAsFixed(0)} - "
+                      "${_selectedAgeRange.end.toStringAsFixed(0)}",
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
+                ),
+                RangeSlider(
+                    activeColor: Theme.of(context).primaryColor,
+                    values: _selectedAgeRange,
+                    labels: _selectedAgeRangeLabels,
+                    divisions: 100,
+                    min: 18,
+                    max: 100,
+                    onChanged: (newRange) {
+                      // Update state
+                      setState(() {
+                        _selectedAgeRange = newRange;
+                        _selectedAgeRangeLabels = RangeLabels(
+                            newRange.start.toStringAsFixed(0),
+                            newRange.end.toStringAsFixed(0));
+                      });
+                      debugPrint('_selectedAgeRange: $_selectedAgeRange');
+                    },
+                    onChangeEnd: (endValues) {
+                      /// Update age range
+                      ///
+                      /// Get start value
+                      final int minAge =
+                          int.parse(endValues.start.toStringAsFixed(0));
+
+                      /// Get end value
+                      final int maxAge =
+                          int.parse(endValues.end.toStringAsFixed(0));
+
+                      // Update age range
+                      UserModel().updateUserData(
+                          userId: UserModel().user.userId,
+                          data: {
+                            '$USER_SETTINGS.$USER_MIN_AGE': minAge,
+                            '$USER_SETTINGS.$USER_MAX_AGE': maxAge,
+                          }).then((_) {
+                        debugPrint('Age range updated');
+                      });
+                    })
+                  ],
+                ),
+
+                const SizedBox(height: 16,),
+                Divider(
+                  indent: 3,
+                  height: 1,
+                  color: borderColor.withOpacity(0.5),
+                ),
+                const SizedBox(height: 16,),
+                // Show me option
+                ListTile(
+                  leading: Icon(
+                    Icons.wc_outlined,
+                    color: Theme.of(context).primaryColor,
+                    size: 30,
+                  ),
+                  title: Text(_i18n.translate('show_me'),
+                      style: const TextStyle(fontSize: 18)),
+                  trailing: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Theme.of(context).primaryColor.withOpacity(0.1),
+                    ),
+                    child: Text(_showMeOption(_i18n),
+                        style: const TextStyle(fontSize: 18)),
+                  ),
+                  onTap: () {
+                    /// Choose Show me option
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return ShowMeDialog();
+                        });
+                  },
+                ),
+
+                SizedBox(height: 16,),
+                Divider(
+                  indent: 3,
+                  height: 1,
+                  color: borderColor.withOpacity(0.5),
+                ),
+                SizedBox(height: 16,),
+
+                /// Hide user profile setting
+                ListTile(
+                  leading: _hideProfile
+                      ? Icon(Icons.visibility_off,
+                          color: Theme.of(context).primaryColor, size: 30)
+                      : Icon(Icons.visibility,
+                          color: Theme.of(context).primaryColor, size: 30),
+                  title: Text(_i18n.translate('hide_profile'),
+                      style: const TextStyle(fontSize: 18)),
+                  subtitle: _hideProfile
+                      ? Text(
+                          _i18n.translate(
+                              'your_profile_is_hidden_on_discover_tab'),
+                          style: const TextStyle(color: Colors.red),
+                        )
+                      : Text(
+                          _i18n.translate(
+                              'your_profile_is_visible_on_discover_tab'),
+                          style: const TextStyle(color: Colors.green)),
+                  trailing: Switch(
+                    activeColor: Theme.of(context).primaryColor,
+                    value: _hideProfile,
+                    onChanged: (newValue) {
+                      // Update UI
+                      setState(() {
+                        _hideProfile = newValue;
+                      });
+                      // User status
+                      String userStatus = 'active';
+                      // Check status
+                      if (newValue) {
+                        userStatus = 'hidden';
+                      }
+
+                      // Update profile status
+                      UserModel().updateUserData(
+                          userId: UserModel().user.userId,
+                          data: {USER_STATUS: userStatus}).then((_) {
+                        debugPrint('Profile hidden: $newValue');
+                      });
+                    },
                   ),
                 ),
               ],

@@ -287,13 +287,13 @@ class _BottomSheetFilterDiscoverWidgetState extends State<BottomSheetFilterDisco
                 ],
               ),
             )),
-            SizedBox(height: 16,),
+            const SizedBox(height: 16,),
             Divider(
               indent: 3,
               height: 1,
               color: borderColor.withOpacity(0.5),
             ),
-            SizedBox(height: 16,),
+            const SizedBox(height: 16,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -307,7 +307,7 @@ class _BottomSheetFilterDiscoverWidgetState extends State<BottomSheetFilterDisco
                     model.setFilterData(null, null, null);
                     Navigator.pop(context);
                   },
-                  child: Text(
+                  child: const Text(
                     'Clear All',
                     style: TextStyle(
                       fontSize: 16,
