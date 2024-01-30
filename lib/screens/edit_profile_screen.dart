@@ -13,6 +13,8 @@ import 'package:scoped_model/scoped_model.dart';
 
 import '../components/decimal_input_formater.dart';
 import '../constants/constants.dart';
+import '../datas/user.dart';
+import '../utils/colors.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -38,6 +40,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _emailController = TextEditingController(text: UserModel().user.userEmail);
   final _heightController = TextEditingController(text: UserModel().user.userHeight?.toStringAsFixed(2));
 
+  final _dreamPlaceController = TextEditingController();
+  final _booksController = TextEditingController();
+  TextEditingController _animeController = TextEditingController();
+
   /// User Birthday info
   int _userBirthDay = UserModel().user.userBirthDay;
   int _userBirthMonth = UserModel().user.userBirthMonth;
@@ -46,6 +52,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   DateTime _initialDateTime = DateTime.now();
   String? _birthday = DateTime(UserModel().user.userBirthYear, UserModel().user.userBirthMonth, UserModel().user.userBirthDay).toString().split(' ')[0];
   String _selectedGender = UserModel().user.userGender;
+  List<String> dreamPlaces = UserModel().user.userPersonalInterests?.dreamPlaces ?? [];
+  List<String> favBooks = UserModel().user.userPersonalInterests?.favoriteBooks ?? [];
+  List<String> favAnimeMovies = UserModel().user.userPersonalInterests?.favoriteAnimeOrMovies ?? [];
+  List<String> interests = UserModel().user.userPersonalInterests?.interests ?? [];
+  bool smokingOrDrinking = UserModel().user.userPersonalInterests?.smokingDrinking ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -301,7 +312,298 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     suffix: Text(_i18n.translate("cm")),
                   ),
                 ),
+
                 const SizedBox(height: 20),
+                const Divider(
+                  indent: 3,
+                  height: 1,
+                  color: borderColor,
+                ),
+                const SizedBox(height: 20),
+
+                const Text("Personal Interests",
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87)),
+                const SizedBox(height: 8),
+
+                SizedBox(height: 16,),
+
+                const Text("Dream Places",
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black87)),
+
+                const SizedBox(height: 16,),
+
+                Row(
+                  children: [
+                    Expanded(child: TextFormField(
+                      controller: _dreamPlaceController,
+                      decoration: InputDecoration(
+                          labelText: 'Add Dream Place',
+                          hintText: 'Eg: Paris, France, etc.',
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          prefixIcon: const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Icon(Icons.place),
+                          )),
+                    ),),
+                    SizedBox(width: 16,),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: IconButton(
+                        color: Colors.white,
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          if(_dreamPlaceController.text.trim().isNotEmpty) {
+                            setState(() {
+                              dreamPlaces.add(_dreamPlaceController.text.trim());
+                              _dreamPlaceController.clear();
+                            });
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                ),
+
+                SizedBox(height: 8,),
+
+                Wrap(
+                  children: dreamPlaces.map((dreamPlace) => Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Chip(
+                      label: Text(dreamPlace),
+                      onDeleted: () {
+                        if(dreamPlaces.length > 1) {
+                          setState(() {
+                            dreamPlaces.remove(dreamPlace);
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('Cannot Delete. At least one dream place is required.'),
+                            duration: Duration(seconds: 2),
+                          ));
+                        }
+                      },
+                    ),
+                  )).toList(),
+                ),
+
+                const SizedBox(height: 16),
+                const Divider(
+                  indent: 3,
+                  height: 1,
+                  color: borderColor,
+                ),
+                const SizedBox(height: 16,),
+
+                const Text("Favourite Books",
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black87)),
+
+                const SizedBox(height: 16,),
+
+                Row(
+                  children: [
+                    Expanded(child: TextFormField(
+                      controller: _booksController,
+                      decoration: const InputDecoration(
+                          labelText: 'Add Book',
+                          hintText: 'Eg: Harry Potter.',
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Icon(Icons.library_books),
+                          )),
+                    ),),
+                    SizedBox(width: 16,),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: IconButton(
+                        color: Colors.white,
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          if(_booksController.text.trim().isNotEmpty) {
+                            setState(() {
+                              favBooks.add(_booksController.text.trim());
+                              _booksController.clear();
+                            });
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                ),
+
+                SizedBox(height: 8,),
+
+                Wrap(
+                  children: favBooks.map((book) => Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Chip(
+                      label: Text(book),
+                      onDeleted: () {
+                        if(favBooks.length > 1) {
+                          setState(() {
+                            favBooks.remove(book);
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('Cannot Delete. At least one book is required.'),
+                            duration: Duration(seconds: 2),
+                          ));
+                        }
+                      },
+                    ),
+                  )).toList(),
+                ),
+
+                const SizedBox(height: 16),
+                const Divider(
+                  indent: 3,
+                  height: 1,
+                  color: borderColor,
+                ),
+                const SizedBox(height: 16,),
+
+                const Text("Favourite Anime/Movies/Web Series",
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black87)),
+
+
+                const SizedBox(height: 16,),
+
+                Row(
+                  children: [
+                    Expanded(child: TextFormField(
+                      controller: _animeController,
+                      decoration: InputDecoration(
+                          labelText: 'Add Anime/Movies/Web Series',
+                          hintText: 'Eg: Naruto, etc.',
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          prefixIcon: const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Icon(Icons.movie),
+                          )),
+                    ),),
+                    SizedBox(width: 16,),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: IconButton(
+                        color: Colors.white,
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          if(_animeController.text.trim().isNotEmpty) {
+                            setState(() {
+                              favAnimeMovies.add(_animeController.text.trim());
+                              _animeController.clear();
+                            });
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                ),
+
+                SizedBox(height: 16,),
+
+                Wrap(
+                  children: favAnimeMovies.map((dreamPlace) => Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Chip(
+                      label: Text(dreamPlace),
+                      onDeleted: () {
+                        if(favAnimeMovies.length > 1) {
+                          setState(() {
+                            favAnimeMovies.remove(dreamPlace);
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('Cannot Delete. At least one anime/movie/web series is required.'),
+                            duration: Duration(seconds: 2),
+                          ));
+                        }
+                      },
+                    ),
+                  )).toList(),
+                ),
+
+                const SizedBox(height: 16),
+                const Divider(
+                  indent: 3,
+                  height: 1,
+                  color: borderColor,
+                ),
+                const SizedBox(height: 16,),
+
+                const Text("Interests",
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black87)),
+
+                const SizedBox(height: 16,),
+
+                Wrap(
+                  children: interestCategories.map((interest) => Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: FilterChip(
+                      label: Text(interest),
+                      selected: interests.contains(interest),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if(selected) {
+                            interests.add(interest);
+                          }
+                          else {
+                            if(interests.length > 1) {
+                              interests.remove(interest);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text('Cannot unselect. At least one interest is required.'),
+                                duration: Duration(seconds: 2),
+                              ));
+                            }
+                          }
+                        });
+                      },
+                    ),
+                  )).toList(),
+                ),
+
+                const SizedBox(height: 16),
+                const Divider(
+                  indent: 3,
+                  height: 1,
+                  color: borderColor,
+                ),
+                SizedBox(height: 16,),
+
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text("Smoking/Drinking", style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black87)),
+                  value: smokingOrDrinking,
+                  onChanged: (bool value) {
+                    setState(() {
+                      smokingOrDrinking = value;
+                    });
+                  },
+                ),
               ],
             );
           }),
@@ -347,6 +649,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         userBirthYear: _userBirthYear,
         userHeight: double.tryParse(_heightController.text.trim()),
         userEmail: _emailController.text.trim(),
+        userPersonalInterests: UserPersonalInterests(
+          dreamPlaces: dreamPlaces,
+          favoriteBooks: favBooks,
+          favoriteAnimeOrMovies: favAnimeMovies,
+          interests: interests,
+          smokingDrinking: smokingOrDrinking,
+        ),
         onSuccess: () {
           /// Show success message
           successDialog(context,
