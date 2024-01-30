@@ -477,6 +477,7 @@ class UserModel extends Model {
     required double? userHeight,
     required String userFullName,
     required String userEmail,
+    required UserPersonalInterests userPersonalInterests,
     // Callback functions
     required VoidCallback onSuccess,
     required Function(String) onFail,
@@ -493,6 +494,7 @@ class UserModel extends Model {
       USER_BIRTH_YEAR: userBirthYear,
       USER_GENDER: userGender,
       USER_EMAIL: userEmail,
+      'personalInterests': userPersonalInterests.toJson(),
     }).then((_) {
       isLoading = false;
       notifyListeners();
