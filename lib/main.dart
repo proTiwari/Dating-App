@@ -12,7 +12,7 @@ import 'package:dating_app/constants/constants.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -31,7 +31,8 @@ void main() async {
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Firebase.initializeApp();
   // Initialize Google Mobile Ads SDK
-  await MobileAds.instance.initialize();
+
+  // await MobileAds.instance.initialize();
 
   /// Update the iOS foreground notification presentation options to allow
   /// heads up notifications.
