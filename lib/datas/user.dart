@@ -30,6 +30,7 @@ class User {
   final int userTotalDisliked;
   final Map<String, dynamic>? userGallery;
   final Map<String, dynamic>? userSettings;
+  final UserPersonalInterests? userPersonalInterests;
 
   // Constructor
   User({
@@ -60,6 +61,7 @@ class User {
     required this.userTotalVisits,
     required this.userTotalDisliked,
     required this.userHeight,
+    this.userPersonalInterests,
   });
 
   /// factory user object
@@ -94,6 +96,48 @@ class User {
       userTotalVisits: doc[USER_TOTAL_VISITS] ?? 0,
       userTotalDisliked: doc[USER_TOTAL_DISLIKED] ?? 0,
       userHeight: doc[USER_HEIGHT] is double ? doc[USER_HEIGHT] : doc[USER_HEIGHT].toDouble(),
+      userPersonalInterests: doc['personalInterests'] is Map ? UserPersonalInterests.fromJson(doc['personalInterests']) : null,
     );
+  }
+}
+
+/// UserPersonalInterests model
+class UserPersonalInterests {
+  /// User personal interests
+  List<String> dreamPlaces;
+  List<String> favoriteBooks;
+  List<String> favoriteAnimeOrMovies;
+  List<String> interests;
+  bool smokingDrinking;
+
+  // Constructor
+  UserPersonalInterests({
+    required this.dreamPlaces,
+    required this.favoriteBooks,
+    required this.favoriteAnimeOrMovies,
+    required this.interests,
+    required this.smokingDrinking,
+  });
+
+  /// factory user personal interests object
+  factory UserPersonalInterests.fromJson(Map<String, dynamic> doc) {
+    return UserPersonalInterests(
+      dreamPlaces: doc['dream_places'] is List ? doc['dream_places'].map<String>((e) => e.toString()).toList() : [],
+      favoriteBooks: doc['fav_books'] is List ? doc['fav_books'].map<String>((e) => e.toString()).toList() : [],
+      favoriteAnimeOrMovies: doc['fav_anime_movies'] is List ? doc['fav_anime_movies'].map<String>((e) => e.toString()).toList() : [],
+      interests: doc['interests'] is List ? doc['interests'].map<String>((e) => e.toString()).toList() : [],
+      smokingDrinking: doc['smoking_drinking'] is bool ? doc['smoking_drinking'] : false,
+    );
+  }
+
+  /// Convert user personal interests to json
+  Map<String, dynamic> toJson() {
+    return {
+      'dream_places': dreamPlaces,
+      'favorite_books': favoriteBooks,
+      'fav_anime_movies': favoriteAnimeOrMovies,
+      'interests': interests,
+      'smoking_drinking': smokingDrinking,
+    };
   }
 }

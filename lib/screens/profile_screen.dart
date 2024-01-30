@@ -16,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../utils/colors.dart';
+
 // ignore: must_be_immutable
 class ProfileScreen extends StatefulWidget {
   /// Params
@@ -202,6 +204,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               value:
                                   '${widget.user.userBirthYear}/${widget.user.userBirthMonth}/${widget.user.userBirthDay}'),
 
+                          /// Gender
+                          _rowProfileInfo(context,
+                              icon: const Icon(Icons.wc,
+                                  color: Colors.black87, size: 28),
+                              title: _i18n.translate('gender'),
+                              value: widget.user.userGender
+                          ),
+
                           /// Join date
                           _rowProfileInfo(context,
                               icon: const SvgIcon("assets/icons/info_icon.svg",
@@ -211,18 +221,114 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               title: _i18n.translate('join_date'),
                               value: timeago.format(widget.user.userRegDate)),
 
-                          const Divider(),
+                          const SizedBox(height: 16),
+                          const Divider(
+                            indent: 3,
+                            height: 1,
+                            color: borderColor,
+                          ),
+                          const SizedBox(height: 16),
 
                           /// Profile bio
                           ListTile(
                             title: Text(_i18n.translate("bio"),
                                 style: const TextStyle(
                                     fontSize: 22,
+                                    fontWeight: FontWeight.bold,
                                     color: Colors.black87)),
                             subtitle: Text(widget.user.userBio,
                                 style: const TextStyle(
                                     fontSize: 18, color: Colors.grey)),
                           ),
+
+                          const SizedBox(height: 16),
+                          const Divider(
+                            indent: 3,
+                            height: 1,
+                            color: borderColor,
+                          ),
+                          const SizedBox(height: 16),
+
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                            child: Text("Personal Interests",
+                                style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87)),
+                          ),
+
+                          widget.user.userPersonalInterests?.dreamPlaces != null ? ListTile(
+                            title: const Text("Dream Places",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black87)),
+                            subtitle: Wrap(
+                              children: widget.user.userPersonalInterests!.dreamPlaces.map((interest) => Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Chip(
+                                  label: Text(interest),
+                                ),
+                              )).toList(),
+                            ),
+                          ) : Container(),
+
+
+                          widget.user.userPersonalInterests?.favoriteBooks != null ? ListTile(
+                            title: const Text("Favourite Books",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black87)),
+                            subtitle: Wrap(
+                              children: widget.user.userPersonalInterests!.favoriteBooks.map((interest) => Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Chip(
+                                  label: Text(interest),
+                                ),
+                              )).toList(),
+                            ),
+                          ) : Container(),
+
+                          widget.user.userPersonalInterests?.favoriteAnimeOrMovies != null ? ListTile(
+                            title: const Text("Favourite Anime/Movies",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black87)),
+                            subtitle: Wrap(
+                              children: widget.user.userPersonalInterests!.favoriteAnimeOrMovies.map((interest) => Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Chip(
+                                  label: Text(interest),
+                                ),
+                              )).toList(),
+                            ),
+                          ) : Container(),
+
+                          widget.user.userPersonalInterests?.interests != null ? ListTile(
+                            title: const Text("Interests",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black87)),
+                            subtitle: Wrap(
+                              children: widget.user.userPersonalInterests!.interests.map((interest) => Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Chip(
+                                  label: Text(interest),
+                                ),
+                              )).toList(),
+                            ),
+                          ) : Container(),
+
+                          widget.user.userPersonalInterests?.smokingDrinking != null ? ListTile(
+                            title: const Text("Smoke/Drink",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black87)),
+                            subtitle: Text(widget.user.userPersonalInterests!.smokingDrinking ? "Yes" : "No",
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.grey)),
+                          ) : Container(),
+
                         ],
                       ),
                     ),
