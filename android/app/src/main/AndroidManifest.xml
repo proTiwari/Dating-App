@@ -70,9 +70,9 @@
         <!-- Config for firebase_admob plugin 
           Replace -> [ADMOB_APP_ID] with your Admob App ID -->
         <!-- Sample AdMob App ID for test: ca-app-pub-3940256099942544~3347511713 -->  
-        <!-- <meta-data
+        <meta-data
           android:name="com.google.android.gms.ads.APPLICATION_ID"
-          android:value=""/> -->
+          android:value="ca-app-pub-7229851428080692~6601958366"/>
           <!-- ca-app-pub-5107966620975752~7838288498 -->
 
         <!-- Config for Place Picker plugin to use the Passport feature
